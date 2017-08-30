@@ -1,37 +1,48 @@
-<project name="xcl" basedir="." default="main">
+<project name="xcl" default="main">
 	<description>Build file for xcl</description>
 
-	<property name="src"       value="src"/>
+	<property name="src.dir"       value="src"/>
 	<property name="lib.dir"   value="lib"/>
 	<property name="build.dir" value="build"/>
 	<property name="classes.dir" value="${build.dir}/classes"/>
 	<property name="jar.dir"   value="${build.dir}/jar"/>
 
-	<property name="main-class" value="com.xcl"/>
+    <property name="jars" location="lib/poi-3.16.jar"/>
+
+    <target name="compile">
+        <mkdir dir="${classes.dir}"/>
+        <javac srcdir="${src.dir}"
+               destdir="${classes.dir}"
+               debug="on"
+               fork="yes"
+               listfiles="yes"
+               includeantruntime="false"
+               memoryMaximumSize="512m">
+            <classpath path="lib/poi-3.16.jar"/>
+        </javac>
+    </target>
+
+    <target name="jar" depends="compile">
+        <mkdir dir="${jar.dir}"/>
+        <jar destfile="${jar.dir}/xcl.jar">
+            <manifest>
+                <attribute name="Main-Class" value="com.xcl.xlio.XlReader"/>
+                <attribute name="Class-Path" value="${jar.dir}/xcl.jar"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="run" depends="main">
+        <java classpath="${jar.dir}/xcl.jar"
+              classname="com.xlio.XlReader"
+              fork="true"/>
+    </target>
 
     <target name="clean">
         <delete dir="${build.dir}"/>
     </target>
 
-    <target name="compile">
-        <mkdir dir="${classes.dir}"/>
-        <javac srcdir="${src.dir}" destdir="${class.dir}"/>
-    </target>
-
-    <target name="jar" depends="compile">
-        <mkdir dir="${jar.dir}"/>
-        <jar destfile="${jar.dir}/${ant.project.name}" basedir="${classes.dir}">
-            <manifest>
-                <attribute name="Main-Class" value="${main-class}"/>
-            </manifest>
-        </jar>
-    </target>
-
-    <target name="run">
-        <java jar="${jar.dir}/${ant.project.name}.jar" fork="true"/>
-    </target>
-
 	<target name="clean-build" depends="clean, jar"/>
-	<target name="main" depends="clean, run"/>
+	<target name="main" depends="jar"/>
 
 </project>
