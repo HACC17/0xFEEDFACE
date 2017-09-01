@@ -1,0 +1,19 @@
+{
+  "name": "0xfeedface",
+  "version": "1.0.0",
+  "description": "HACC 2017 Hawaii DOH Web App",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HACC17/0xFEEDFACE.git"
+  },
+  "author": "Brian Spain",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HACC17/0xFEEDFACE/issues"
+  },
+  "homepage": "https://github.com/HACC17/0xFEEDFACE#readme"
+}
