@@ -1,5 +1,0 @@
-# Ignore vim swap files.
-*.swp
-
-# Ignore the build files.
-build/
