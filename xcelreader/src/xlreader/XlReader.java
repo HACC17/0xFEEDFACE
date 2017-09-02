@@ -3,6 +3,7 @@ package xlreader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.stream.IntStream;
 
@@ -36,6 +37,11 @@ public class XlReader {
         this.nsheets = workbook.getNumberOfSheets();
     }
 
+    /**
+     * Return a HashMap of sheets.
+     *
+     * @return  HashMap<Integer, Sheet>
+     */
     private HashMap<Integer, Sheet> getSheets() {
         HashMap<Integer, Sheet> hashmap = new HashMap<>();
         IntStream.range(0, nsheets)
@@ -44,6 +50,12 @@ public class XlReader {
         return hashmap;
     }
 
+    /**
+     * Open an excel file and return a Workbook.
+     *
+     * @return                  an apache.poi.ss.Workbook
+     * @throws  IOException     if the file doesn't exist or something like that
+     */
     private Workbook makeWorkBooks() throws IOException {
         FileInputStream fin = null;
 
@@ -52,11 +64,8 @@ public class XlReader {
             fin = new FileInputStream(this.filename);
         } catch(Exception e) {
             e.printStackTrace();
-
-            /* Can't do anything without a file. */
             System.exit(1);
         }
-
         Workbook wb = null;
 
         try {
@@ -72,11 +81,12 @@ public class XlReader {
                 System.out.println("Unsupported file type.");
                 System.exit(1);
             }
-
-        } catch(Exception e) {
+        }
+        catch(Exception e) {
             e.printStackTrace();
             System.out.println(e);
-        } finally {
+        }
+        finally {
             if (fin != null) {
                 fin.close();
             }
@@ -84,20 +94,29 @@ public class XlReader {
         return wb;
     }
 
+    /**
+     * Find all of the formula in this workbook.
+     */
     private void findAllFormulae() {
         for (Sheet sheet : this.workbook) {
             for (Row row : sheet) {
                 for (Cell cell : row) {
                     if (cell.getCellTypeEnum() == CellType.FORMULA) {
                         System.out.format("Found a formula at %s\n", cell.getAddress());
-                        System.out.format("Formula: %s", cell.getCellFormula());
+                        System.out.format("Formula: %s\n", cell.getCellFormula());
                     }
                 }
             }
-
         }
     }
 
+
+    /**
+     * Evaluate a formula in a cell.
+     *
+     * @param sheetnumber
+     * @param cellreference
+     */
     public void evaluateFormulae(final int sheetnumber, final String cellreference) {
         FormulaEvaluator evaluator = this.workbook.getCreationHelper().createFormulaEvaluator();
         CellReference cellref = new CellReference(cellreference);
@@ -108,10 +127,12 @@ public class XlReader {
         CellValue val = evaluator.evaluate(cell);
     }
 
+    /**
+     * @return  the number of sheets in this workbook
+     */
     public int getNsheets() {
         return this.nsheets;
     }
-
 
     public static void main(String[] args) throws IOException {
 
@@ -131,27 +152,5 @@ public class XlReader {
 
         xlreader.findAllFormulae();
         xlreader.evaluateFormulae(0, "A3");
-
-        //Row row = sheet.getRow(3);
-        //Cell cell = row.getCell("A");
-
-        //CellValue val = evaluator.evaluate(cell);
-
-        /*
-        switch (val.getCellType()) {
-            case Cell.CELL_TYPE_BOOLEAN:
-                System.out.println(val.getBooleanValue());
-                break;
-            case Cell.CELL_TYPE_NUMERIC:
-                System.out.println(val.getNumberValue());
-                break;
-            case Cell.CELL_TYPE_BLANK:
-                break;
-            case Cell.CELL_TYPE_ERROR:
-                break;
-            case Cell.CELL_TYPE_FORMULA:
-                break;
-        }
-        */
     }
 }
