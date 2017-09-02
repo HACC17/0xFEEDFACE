@@ -44,8 +44,9 @@ public class XlReader {
      */
     private HashMap<Integer, Sheet> getSheets() {
         HashMap<Integer, Sheet> hashmap = new HashMap<>();
-        IntStream.range(0, nsheets)
-                .forEach(idx -> hashmap.put(idx, this.workbook.getSheetAt(idx)));
+        for (int idx = 0; idx < nsheets; idx++) {
+            hashmap.put(idx, this.workbook.getSheetAt(idx));
+        }
 
         return hashmap;
     }
