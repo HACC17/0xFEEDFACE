@@ -3,9 +3,7 @@ package xlreader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.stream.IntStream;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
@@ -24,17 +22,16 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  */
 
 public class XlReader {
-    private String filename;
-    private Workbook workbook;
-    private Sheet currentsheet;
-    private HashMap<Integer, Sheet> sheets;
-    private int nsheets;
+    private final String filename;
+    private final Workbook workbook;
+    private final HashMap<Integer, Sheet> sheets;
+    private final int nsheets;
 
     public XlReader(final String filename) throws IOException {
         this.filename = filename;
         this.workbook = makeWorkBooks();
         this.sheets = getSheets();
-        this.nsheets = workbook.getNumberOfSheets();
+        this.nsheets = this.workbook.getNumberOfSheets();
     }
 
     /**
@@ -118,7 +115,7 @@ public class XlReader {
      * @param sheetnumber
      * @param cellreference
      */
-    public void evaluateFormulae(final int sheetnumber, final String cellreference) {
+    public void evaluateFormula(final int sheetnumber, final String cellreference) {
         FormulaEvaluator evaluator = this.workbook.getCreationHelper().createFormulaEvaluator();
         CellReference cellref = new CellReference(cellreference);
         Sheet sheet = this.workbook.getSheetAt(sheetnumber);
@@ -152,6 +149,6 @@ public class XlReader {
         System.out.format("nsheets: %d\n", xlreader.getNsheets());
 
         xlreader.findAllFormulae();
-        xlreader.evaluateFormulae(0, "A3");
+        xlreader.evaluateFormula(0, "A3");
     }
 }
