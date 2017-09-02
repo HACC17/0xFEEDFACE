@@ -1,6 +1,7 @@
 var express = require("express");
 var app = express();
 
+
 app.use(express.static("public"));
 app.set("view engine", "ejs");
 app.get("/", function(req, res){
@@ -13,9 +14,20 @@ app.get("/Form", function(req, res){
 
 app.get("/java/:statement", function(req, res){
    var statement = req.params.statement;
-// Instantiate a java class and call methods, not working need a jar
-  // var jobj = Packages.com.hacc2017.hello(statement);
-  // statement = jobj.repeatBack();
+    var error1;
+    var error2;
+    var exec = require('child_process').exec, child;
+    child = exec('java -cp ~/workspace/0xFEEDFACE/EALSurfer/java/hello.jar com.hacc2017.hello',
+        function (error, stdout, stderr){
+            console.log('stdout: ' + stdout);
+            console.log('stderr: ' + stderr);
+             if(error !== null){
+                console.log('exec error: ' + error);
+    }
+});
+
+
+
    res.render("java", {statement: statement});
 });
 
