@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/HACC17/0xFEEDFACE/issues"
   },
-  "homepage": "https://github.com/HACC17/0xFEEDFACE#readme"
+  "homepage": "https://github.com/HACC17/0xFEEDFACE#readme",
+  "dependencies": {
+    "child_process": "^1.0.2"
+  }
 }
