@@ -3,3 +3,4 @@ lib/poi-3.16/docs/
 .idea/
 out/
 *.class
+.~lock.*

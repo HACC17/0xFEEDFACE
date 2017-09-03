@@ -94,17 +94,19 @@ public class XlReader {
     /**
      * Find all of the formula in this workbook.
      */
-    private void findAllFormulae() {
+    private HashMap<String, String> findAllFormulae() {
+        HashMap<String, String> formulae = new HashMap<>();
+
         for (Sheet sheet : this.workbook) {
             for (Row row : sheet) {
                 for (Cell cell : row) {
                     if (cell.getCellTypeEnum() == CellType.FORMULA) {
-                        System.out.format("Found a formula at %s\n", cell.getAddress());
-                        System.out.format("Formula: %s\n", cell.getCellFormula());
+                        formulae.put(cell.getAddress().toString(), cell.getCellFormula());
                     }
                 }
             }
         }
+        return formulae;
     }
 
 
@@ -153,7 +155,6 @@ public class XlReader {
         return this.nsheets;
     }
 
-
     /**
      * Get the value from a cell.
      *
@@ -181,7 +182,7 @@ public class XlReader {
 
             switch (cell.getCellTypeEnum()) {
                 case FORMULA:
-                    map.put(addr, cell.getCellFormula());
+                    map.put(addr, cell.getNumericCellValue());
                     break;
                 case BLANK:
                     map.put(addr, cell.getRichStringCellValue());
@@ -219,6 +220,8 @@ public class XlReader {
 
             switch (cell.getCellTypeEnum()) {
                 case FORMULA:
+                    cell.setCellFormula(item.getValue().toString());
+                    success = true;
                     break;
                 case BLANK:
                     break;
@@ -243,27 +246,48 @@ public class XlReader {
         return success;
     }
 
-    private void testPopulate() {
-        HashMap<String, Object> map = new HashMap<>();
+    private void testGetAllFormulae() {
+        System.out.println("Testing getAllFormulae");
 
+        /* Do the thing. */
+        HashMap<String, String> formulae = findAllFormulae();
+
+        assert formulae.get("A3").equals("0");
+        assert formulae.get("B3").equals("SUM(B1:B2)");
+    }
+
+    private void testPopulate() {
+        System.out.println("Testing populate");
+
+        /* Make a map to populate the cells. */
+        HashMap<String, Object> map = new HashMap<>();
         map.put("A1", "hello");
         map.put("A2", 42.0);
         map.put("A3", true);
 
-        assert populate(0, map) == true;
+        /* Do the thing. */
+        assert populate(0, map) == true : "FAILED: populate";
 
+        /* This is where we expect values. */
         String[] cellrefs = {"A1", "A2", "A3"};
         HashMap<String, Object> cells = this.getCellValue(0, cellrefs);
 
-        assert (String) cells.get("A1") == "hello";
-        assert (Double) cells.get("A2") == 42.0;
-        assert (Boolean) cells.get("A3") == true;
+        assert cells.get("A1").equals("hello") : "FAILED: A1 is not hello";
+        assert (Double) cells.get("A2") == 42.0 : "FAILED: A2 is not 42.0";
+        assert (Double) cells.get("A3") == 0.0 : "FAILED: A3 is false";
     }
 
     public void testEvaluateAll() {
+        System.out.println("Testing evaluateAll");
+
+        /* Do the thing. */
         this.evaluateAll(0);
+
+        /* This is where we expect values. */
         String[] cellrefs = {"B1", "B2", "B3"};
+
         HashMap<String, Object> cells = this.getCellValue(0, cellrefs);
+
         assert (Double) cells.get("B1") == 19.0;
         assert (Double) cells.get("B2") == 23.0;
         assert (Double) cells.get("B3") == 42.0;
@@ -282,8 +306,6 @@ public class XlReader {
 
         XlReader xlreader = new XlReader(filename);
 
-        System.out.format("nsheets: %d\n", xlreader.getNsheets());
-
         //xlreader.findAllFormulae();
         //xlreader.evaluateFormula(0, "A3");
 
@@ -291,6 +313,7 @@ public class XlReader {
         //HashMap vals = xlreader.getCellValue(2, cells);
         //vals.forEach((k, v) -> System.out.format("Cell: %s   Value: %s\n", k, v));
 
+        xlreader.testGetAllFormulae();
         xlreader.testPopulate();
         xlreader.testEvaluateAll();
     }
