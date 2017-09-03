@@ -1,69 +1,27 @@
-body {
-	font-family: roboto;
-	background: #c2e59c;  /* fallback for old browsers */
-	background-image: url(http://health.hawaii.gov/about/wp-content/themes/Chameleon-State-Template-Larger-Rotating-Banner/images/body-bg2.png);
+body{
+	background-image: url("http://health.hawaii.gov/wp-content/uploads/2014/04/bg-image-5.jpg");
 }
 
-ul {
-	list-style-type: none;
-	vertical-align: middle;
-	margin: 0;
-	padding: 0;
+input {
+	box-sizing: border-box;
 }
 
-li {
-	height: 40px;
-	margin: none;
-	vertical-align: middle;
-	text-align: center;
-	font-size: 2rm;
+.section {
+ width:100%;
 }
 
-li:nth-of-type(odd) {
-	background: white;
-}
-
-
-li:nth-of-type(even) {
-	background:  #f7f7f7;
-}
-
-h1 {
-	color: white;
-	background: #2980b9;
-	margin: 0;
-	padding: 2% 5%;
-	font-size: 26px;
-	font-weight: 400;
-}
-
-
-.tabs:hover {
-	color: blue;
-	background: #d7d7d7;
-}
-
-#selected {
-	font-weight: strong;
-	box-shadow: 2px 2px 2px rgba(0,0,0, .5);
-	background: #d7d7d7;
-
-}
-
-#surferContainer {
-	box-shadow: 0 0 3px rgba(0,0,0, .2);
-	width: 90%;
-	height: 100%;
-	margin: 100px auto;
-	background: #f7f7f7;
-}
-
-#sheetTabs {
-	width: 20%;
+#EALSurfer {
 	box-shadow: 3px 3px 3px rgba(0,0,0, .5);
+	background-color: white;
+	padding: 20px;
 }
 
-#sheetDisplay {
-	width: 80%;
-	height: 100%;
+
+
+#banner {
+	background-color: #4286f4;
+	color: white;
+	margin-left: 40px;
+	margin-right: 40px;
+	padding: 0;
 }
