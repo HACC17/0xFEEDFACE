@@ -10,6 +10,12 @@ input {
  width:100%;
 }
 
+.display {
+	background: white;
+	margin: 100px;
+	max-height: 300px;
+}
+
 #EALSurfer {
 	box-shadow: 3px 3px 3px rgba(0,0,0, .5);
 	background-color: white;
@@ -33,7 +39,10 @@ input {
 	color: white;
 	padding: 5px 7px;
 }
+
 #generate:hover {
 	background-color:#1e6ded;
 	color: black;
 }
+
+

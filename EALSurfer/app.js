@@ -16,7 +16,7 @@ app.get("/report/:data", function(req, res){
     var rawFormData = req.params.data;
     var formData = JSON.parse(rawFormData);
     console.log(formData);
-    res.send("<h1>Form Sent</h1>");
+    res.send("<h1>Your form is available at:</h1>");
 });
 
 

@@ -1,7 +1,7 @@
 var generate = document.getElementById("generate");
 
 
-generate.addEventListener("click", function() {
+generate.addEventListener("click", function(event) {
     var formdata = {
         "sheet1": {
             "D5":document.getElementById("landUse").value,
@@ -17,7 +17,15 @@ generate.addEventListener("click", function() {
     var rawdata = JSON.stringify(formdata);
     var path = "/report/" + rawdata;
     var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            document.getElementById("submitted").classList.toggle("display");
+            document.getElementById("submitted").innerHTML = xmlHttp.response;
+            console.log(xmlHttp.response);
+       }
+    };
     xmlHttp.open("GET", path, true); // true for asynchronous 
-    xmlHttp.send(null);
+    xmlHttp.send();
+    
 });
 
