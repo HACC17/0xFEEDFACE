@@ -2,6 +2,7 @@ package xlreader;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -23,28 +24,23 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 public class XlReader {
     private final String filename;
     private final Workbook workbook;
-    private final HashMap<Integer, Sheet> sheets;
+    private final ArrayList<Sheet> sheets;
     private final int nsheets;
 
     public XlReader(final String filename) throws IOException {
         this.filename = filename;
         this.workbook = makeWorkBooks();
-        this.sheets = getSheets();
+        this.sheets = makeSheets();
         this.nsheets = this.workbook.getNumberOfSheets();
     }
 
     /**
-     * Return a HashMap of sheets.
-     *
-     * @return  HashMap<Integer, Sheet>
+     * Return an ArrayList of sheets.
      */
-    private HashMap<Integer, Sheet> getSheets() {
-        HashMap<Integer, Sheet> hashmap = new HashMap<>();
-        for (int idx = 0; idx < nsheets; idx++) {
-            hashmap.put(idx, this.workbook.getSheetAt(idx));
-        }
-
-        return hashmap;
+    private ArrayList<Sheet> makeSheets() {
+        ArrayList<Sheet> sheets = new ArrayList<>();
+        this.workbook.forEach(sheet -> sheets.add(sheet));
+        return sheets;
     }
 
     /**
@@ -170,14 +166,13 @@ public class XlReader {
      */
     public HashMap<String, Object> getCellValue(final int sheetnumber, final String[] cellreferences) {
 
-        HashMap<String, Object> map = new HashMap<>();
+        final HashMap<String, Object> map = new HashMap<>();
+        final Sheet sheet = this.workbook.getSheetAt(sheetnumber);
 
         for (String cr : cellreferences) {
-            Sheet sheet = this.workbook.getSheetAt(sheetnumber);
             CellReference cellref = new CellReference(cr);
             Row row = sheet.getRow(cellref.getRow());
             Cell cell = row.getCell(cellref.getCol());
-
             String addr = cell.getAddress().toString();
 
             switch (cell.getCellTypeEnum()) {
@@ -207,6 +202,13 @@ public class XlReader {
         return map;
     }
 
+    /**
+     * Given a map of {cell : value} populate each cell with the value.
+     *
+     * @param   sheetnumber     the number of the sheet in the workbook
+     * @param   map             a map containing {cell : value} pairs
+     * @return                  true if population is successful
+     */
     public Boolean populate(final int sheetnumber, HashMap<String, Object> map) {
 
         Boolean success = false;
@@ -246,6 +248,9 @@ public class XlReader {
         return success;
     }
 
+    /***************************************************************
+     * Here begin the tests. They shouldn't be here, but they are. *
+     ***************************************************************/
     private void testGetAllFormulae() {
         System.out.println("Testing getAllFormulae");
 
