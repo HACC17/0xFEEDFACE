@@ -224,6 +224,23 @@ public class XlReader {
         return success;
     }
 
+    private void testPopulate() {
+        HashMap<String, Object> map = new HashMap<>();
+
+        map.put("A1", "hello");
+        map.put("A2", 42.0);
+        map.put("A3", true);
+
+        assert populate(0, map) == true;
+
+        String[] cellrefs = {"A1", "A2", "A3"};
+        HashMap<String, Object> cells = this.getCellValue(0, cellrefs);
+
+        assert (String) cells.get("A1") == "hello";
+        assert (Double) cells.get("A2") == 42.0;
+        assert (Boolean) cells.get("A3") == true;
+    }
+
     public static void main(String[] args) throws IOException {
 
         /* Check the command line arguments. */
@@ -241,10 +258,12 @@ public class XlReader {
         System.out.format("nsheets: %d\n", xlreader.getNsheets());
 
         //xlreader.findAllFormulae();
-        xlreader.evaluateFormula(0, "A3");
+        //xlreader.evaluateFormula(0, "A3");
 
-        String[] cells = {"D5", "D7", "D10", "D14", "C16", "D22", "D24", "D26"};
-        HashMap vals = xlreader.getCellValue(2, cells);
-        vals.forEach((k, v) -> System.out.format("Cell: %s   Value: %s\n", k, v));
+        //String[] cells = {"D5", "D7", "D10", "D14", "C16", "D22", "D24", "D26"};
+        //HashMap vals = xlreader.getCellValue(2, cells);
+        //vals.forEach((k, v) -> System.out.format("Cell: %s   Value: %s\n", k, v));
+
+        xlreader.testPopulate();
     }
 }
