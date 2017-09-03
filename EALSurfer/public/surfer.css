@@ -25,3 +25,15 @@ input {
 	margin-right: 40px;
 	padding: 0;
 }
+
+#generate {
+	width: 120px;
+	height: 30px;
+	background-color:#4286f4;
+	color: white;
+	padding: 5px 7px;
+}
+#generate:hover {
+	background-color:#1e6ded;
+	color: black;
+}
