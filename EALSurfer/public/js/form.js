@@ -1,5 +1,6 @@
 var generate = document.getElementById("generate");
 
+
 generate.addEventListener("click", function() {
     var formdata = {
         "sheet1": {
@@ -13,7 +14,10 @@ generate.addEventListener("click", function() {
             "D26":document.getElementById("soilVapor").value
         }
     }
-    
-    console.log(formdata);
+    var rawdata = JSON.stringify(formdata);
+    var path = "/report/" + rawdata;
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("GET", path, true); // true for asynchronous 
+    xmlHttp.send(null);
 });
 

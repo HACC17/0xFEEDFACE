@@ -8,10 +8,16 @@ app.get("/", function(req, res){
     res.send("<h1>HACC2017 0xFEEDFACE landing page.");
 });
 
-app.get("/Form", function(req, res){
+app.get("/form", function(req, res){
     res.render("form")
 });
 
+app.get("/report/:data", function(req, res){
+    var rawFormData = req.params.data;
+    var formData = JSON.parse(rawFormData);
+    console.log(formData);
+    res.send("<h1>Form Sent</h1>");
+});
 
 
 app.get("/java/:statement", function(req, res){
