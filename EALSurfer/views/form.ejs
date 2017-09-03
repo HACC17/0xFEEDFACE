@@ -1,10 +1,10 @@
 <% include partials/header %>
-
+<div id="submitted">
 <div class="container" id="EALSurfer">
   <div class="row"><a href="/form"><div class="container"><h1>EAL Surfer</h1></div></a></div>
   <div class="row flex">
     <div class="col-lg-8 col-sm-8">
-          <form>
+          <form id="form">
         <label for="step1">Select Site Scenario</label>
         <div class="container form-group section" id="step1">
           <label for="landUse">Land Use</label>
@@ -19,8 +19,8 @@
           </select>
           <label for="distanceToWater">Distance To Nearest Surface Water Body</label>
           <select class="form-control" id="distanceToWater">
-            <option> Less than 150m</option>
-            <option>More than 150m</option>
+            <option> &lt150m</option>
+            <option>&lt150m</option>
           </select>
         </div>
         
@@ -28,8 +28,8 @@
         <div class="container form-group section" id="step2">
           <label class="form-check-label" for="chemicalInputType"> Chemical Input Type </label>
           <div id="chemicalInputType">
-            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> Chemical Name
-            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> CAS#
+            <input class="form-check-input" type="radio" name="inlineRadioOptions" value="option1"> Chemical Name
+            <input class="form-check-input" type="radio" name="inlineRadioOptions" value="option2"> CAS#
           </div>
           <select class="form-control" id="chemical" placeholder="Chemical">
             <option>Nasty shit</option>
@@ -53,11 +53,12 @@
           <label for="soilVapor">Soil Vapor (ug/kg)</label>
           <input type="number" class="form-control" id="soilVapor">
         </div>
-        <button type="submit" class="btn btn-primary">Generate PDF Report</button>
+        <div id="generate">Generate Forms</div>
       </form>
     </div>
     <div class="col-lg-4 col-sm-4">
     </div>
   </div>
+</div>
 </div>
 <%include partials/footer%>

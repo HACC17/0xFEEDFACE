@@ -10,13 +10,17 @@ input {
  width:100%;
 }
 
+.display {
+	background: white;
+	margin: 100px;
+	max-height: 300px;
+}
+
 #EALSurfer {
 	box-shadow: 3px 3px 3px rgba(0,0,0, .5);
 	background-color: white;
 	padding: 20px;
 }
-
-
 
 #banner {
 	background-color: #4286f4;
@@ -25,3 +29,18 @@ input {
 	margin-right: 40px;
 	padding: 0;
 }
+
+#generate {
+	width: 120px;
+	height: 30px;
+	background-color:#4286f4;
+	color: white;
+	padding: 5px 7px;
+}
+
+#generate:hover {
+	background-color:#1e6ded;
+	color: black;
+}
+
+
