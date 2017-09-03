@@ -132,7 +132,10 @@ public class XlReader {
      *
      * The caller is responsible for knowing where the result goes. It will probably be
      * a sheet somewhere.
-     * @param sheetnumber
+     *
+     * Note: this changes our world!
+     *
+     * @param   sheetnumber     the number of the sheet to get
      */
     public void evaluateAll(final int sheetnumber) {
         if (sheetnumber > this.nsheets) {
@@ -156,9 +159,10 @@ public class XlReader {
      *
      * Returns a map with {cell reference : value}.
      *
-     * NOTE: Not all cells will have a value. If the cell is blank or doesn't exist
+     * Note: Not all cells will have a value. If the cell is blank or doesn't exist
      *       then the resulting map will have a null value. It is the caller's
      *       responsibility to check for null.
+     *
      * @param   sheetnumber      an integer
      * @param   cellreferences   a string like "A3"
      * @return  map              a hash map like {cellreference : value | null}
