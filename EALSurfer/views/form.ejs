@@ -1,21 +1,63 @@
 <% include partials/header %>
-<div id="surferContainer">
 
-	<h1>
-		EAL Surfer 
-		<i class="fa fa-plus"></i>
-	</h1>
-	<div id ="sheetTabs">
-		<!-- Choose from list of sheets -->
-		<ul>
-			<li class="tabs" id="selected"> Tab 1</li>
-			<li class="tabs"> Tab 2</li>
-			<li class="tabs"> Tab 3</li>
-		</ul>
-	</div>
-	<div id="sheetDisplay">
-	
-	</div>
-	
+<div class="container" id="EALSurfer">
+  <div class="row"><a href="/form"><div class="container"><h1>EAL Surfer</h1></div></a></div>
+  <div class="row flex">
+    <div class="col-lg-8 col-sm-8">
+          <form>
+        <label for="step1">Select Site Scenario</label>
+        <div class="container form-group section" id="step1">
+          <label for="landUse">Land Use</label>
+          <select class="form-control" id="landUse">
+            <option>Unrestricted</option>
+            <option>Commercial/Industrial Use Onlys</option>
+          </select>
+          <label for="groundWaterUtility">Groundwater Utility</label>
+          <select class="form-control" id="groundWaterUtility">
+            <option>Drinking Water Resrouce</option>
+            <option>Nondrinking Water Resorce</option>
+          </select>
+          <label for="distanceToWater">Distance To Nearest Surface Water Body</label>
+          <select class="form-control" id="distanceToWater">
+            <option> Less than 150m</option>
+            <option>More than 150m</option>
+          </select>
+        </div>
+        
+        <label for="step2">Select Contaminant</label>
+        <div class="container form-group section" id="step2">
+          <label class="form-check-label" for="chemicalInputType"> Chemical Input Type </label>
+          <div id="chemicalInputType">
+            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> Chemical Name
+            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> CAS#
+          </div>
+          <select class="form-control" id="chemical" placeholder="Chemical">
+            <option>Nasty shit</option>
+            <option>Nastier shit</option>
+            <option>Nastiest shit</option>
+            <option>Nasty shit</option>
+            <option>Nasty shit</option>
+            <option>Nasty shit</option>
+            <option>Nasty shit</option>
+            <option>Nasty shit</option>
+            <option>Nasty shit</option>
+            <option>Nasty shit</option>
+          </select>
+        </div>
+        <label for="step3">Enter Site Data</label>
+        <div class="container form-group section" id="step3">
+          <label for="soil">Soil (mg/kg)</label>
+          <input type="number" class="form-control" id="soil">
+          <label for="groundWater">Groundwater (ug/kg)</label>
+          <input type="number" class="form-control" id="groundWater">
+          <label for="soilVapor">Soil Vapor (ug/kg)</label>
+          <input type="number" class="form-control" id="soilVapor">
+        </div>
+        <button type="submit" class="btn btn-primary">Generate PDF Report</button>
+      </form>
+    </div>
+    <div class="col-lg-4 col-sm-4">
+    </div>
+  </div>
 </div>
 <%include partials/footer%>
