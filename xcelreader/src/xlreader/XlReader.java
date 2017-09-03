@@ -1,6 +1,5 @@
 package xlreader;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
@@ -129,6 +128,22 @@ public class XlReader {
     }
 
     /**
+     * Evaluate all the cells in a Sheet.
+     *
+     * The caller is responsible for knowing where the result goes. It will probably be
+     * a sheet somewhere.
+     * @param sheetnumber
+     */
+    public void evaluateAll(final int sheetnumber) {
+        if (sheetnumber > this.nsheets) {
+            System.exit(1);
+        }
+
+        FormulaEvaluator evaluator = this.workbook.getCreationHelper().createFormulaEvaluator();
+        evaluator.evaluateAll();
+    }
+
+    /**
      * @return  the number of sheets in this workbook
      */
     public int getNsheets() {
@@ -144,9 +159,9 @@ public class XlReader {
      * NOTE: Not all cells will have a value. If the cell is blank or doesn't exist
      *       then the resulting map will have a null value. It is the caller's
      *       responsibility to check for null.
-     * @param   sheetnumber     an integer
+     * @param   sheetnumber      an integer
      * @param   cellreferences   a string like "A3"
-     * @return  map             a hash map like {cellreference : value | null}
+     * @return  map              a hash map like {cellreference : value | null}
      */
     public HashMap<String, Object> getCellValue(final int sheetnumber, final String[] cellreferences) {
 
@@ -241,6 +256,15 @@ public class XlReader {
         assert (Boolean) cells.get("A3") == true;
     }
 
+    public void testEvaluateAll() {
+        this.evaluateAll(0);
+        String[] cellrefs = {"B1", "B2", "B3"};
+        HashMap<String, Object> cells = this.getCellValue(0, cellrefs);
+        assert (Double) cells.get("B1") == 19.0;
+        assert (Double) cells.get("B2") == 23.0;
+        assert (Double) cells.get("B3") == 42.0;
+    }
+
     public static void main(String[] args) throws IOException {
 
         /* Check the command line arguments. */
@@ -251,7 +275,6 @@ public class XlReader {
         }
 
         String filename = args[0];
-        File file = new File(filename);
 
         XlReader xlreader = new XlReader(filename);
 
@@ -265,5 +288,6 @@ public class XlReader {
         //vals.forEach((k, v) -> System.out.format("Cell: %s   Value: %s\n", k, v));
 
         xlreader.testPopulate();
+        xlreader.testEvaluateAll();
     }
 }
