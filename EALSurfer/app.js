@@ -5,7 +5,7 @@ var app = express();
 app.use(express.static("public"));
 app.set("view engine", "ejs");
 app.get("/", function(req, res){
-    res.send("<h1>HACC2017 0xFEEDFACE landing page.");
+    res.send("<h1>HACC2017 0xFEEDFACE landing page.</h1><p>Expect great things.</p>");
 });
 
 app.get("/form", function(req, res){

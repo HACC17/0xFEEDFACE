@@ -6,12 +6,12 @@ input {
 	box-sizing: border-box;
 }
 
-div a {
+.nav-std a {
     color: inherit;
     text-decoration: none;
 }
 
-div a:hover 
+.nav-std a:hover 
 {
      text-decoration:none; 
      cursor:pointer;  
