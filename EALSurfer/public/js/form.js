@@ -1,4 +1,10 @@
 var generate = document.getElementById("generate");
+var chemical = document.getElementById("chemical");
+document.getElementById("chemicalinfotitle").innerHTML = chemical.value;
+chemical.addEventListener("change", function(e){
+   chemical =  document.getElementById("chemical").value;
+   document.getElementById("chemicalinfotitle").innerHTML = chemical;
+});
 
 
 generate.addEventListener("click", function(event) {

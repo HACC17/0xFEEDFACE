@@ -12,8 +12,14 @@ input {
 
 .display {
 	background: white;
-	margin: 100px;
-	max-height: 300px;
+	margin: auto;
+}
+
+.infoblock {
+	border-radius: 20px;
+	padding: 5px;
+	width: 100%;
+	color: white;
 }
 
 #EALSurfer {
@@ -22,6 +28,9 @@ input {
 	padding: 20px;
 }
 
+#finaleals {
+	background-color : #a986f9;
+}
 #banner {
 	background-color: #4286f4;
 	color: white;
@@ -31,11 +40,8 @@ input {
 }
 
 #generate {
-	width: 120px;
-	height: 30px;
-	background-color:#4286f4;
-	color: white;
-	padding: 5px 7px;
+	max-width: 200px;
+	margin: auto;
 }
 
 #generate:hover {
