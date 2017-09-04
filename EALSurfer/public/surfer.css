@@ -20,7 +20,13 @@ input {
 	padding: 5px;
 	width: 100%;
 	color: white;
+	text-align: left;
 }
+
+.infotitle {
+	text-align: center;
+}
+
 
 #EALSurfer {
 	box-shadow: 3px 3px 3px rgba(0,0,0, .5);
