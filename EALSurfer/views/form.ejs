@@ -1,7 +1,19 @@
 <% include partials/header %>
+<div class="container surferpage" id="banner">
+  <div class="row banner"><a href="/form"><div class="container"><img src=""><h1>Hawaii Department of Health</h1></div></a></div>
+</div>
+<nav class="navbar" id="surfernav">
+   <div class="container nav-std">
+     <div class="row nav-std">
+       <div class="col-sm-3 nav-std"><h3><strong><a href="/form">EAL Surfer</a></strong></h3></div>
+       <div class="col-sm-2 tab">Instructions</div>
+       <div class="col-sm-2 tab">EAL Surfer Form</div>
+       <div class="col-sm-2 tab">Detailed EALS</div>
+     </div>
+   </div>
+</nav>
 <div id="submitted">  
   <div class="container" id="EALSurfer">
-    <div class="row"><a href="/form"><div class="container"><h1>EAL Surfer</h1></div></a></div>
     <div class="row flex">
       <div class="col-sm-8">
         <form id="siteform">
@@ -28,13 +40,13 @@
         <div class="infoblock">
           <h6 class="infotitle">Reference</p></h6>
           <p>
-            HDOH 2016, Evaluation of Environmental Hazards at Sites with Contaminated Soil and Groundwater (Summer 2016): Hawai'i Department of Health, Hazard Evaluation and Emergency Response, <a href="http://hawaii.gov/health/environmental/hazard/index.html">Found Here</a>								
+            HDOH 2016, Evaluation of Environmental Hazards at Sites with Contaminated Soil and Groundwater (Summer 2016): Hawai'i Department of Health, Hazard Evaluation and Emergency Response, <a href="http://hawaii.gov/health/environmental/hazard/index.html">Hawaii DOH</a>								
           </p>
         </div>
       </div>
     </div>
     <div class="row flex">
-      <div class="col-lg-8 col-sm-8">
+      <div class="col-sm-8">
         <form id="chemicalform">
           <label class="sectionlabel" for="step1">Select Site Scenario</label>
           <div class="container form-group section" id="step1">
@@ -77,7 +89,7 @@
           <button type="button" class="btn btn-primary btn-lg btn-block" id="generate">Generate Forms</button>
         </form>
       </div>
-      <div class="col-lg-4 col-sm-4">
+      <div class="col-sm-4">
         <div class="row spacer">
           <div class="col" id="warning"></div>
         </div>

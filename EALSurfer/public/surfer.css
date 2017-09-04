@@ -1,14 +1,74 @@
 body{
-	background-image: url("http://health.hawaii.gov/wp-content/uploads/2014/04/bg-image-5.jpg");
+	background-image: url("/images/bg-image-5.jpg");
 }
 
 input {
 	box-sizing: border-box;
 }
 
+div a {
+    color: inherit;
+    text-decoration: none;
+}
+
+div a:hover 
+{
+     text-decoration:none; 
+     cursor:pointer;  
+}
+
+.nav-std {
+	height: 100%;
+	text-align: center;
+	vertical-align: middle;
+}
+
+.tab {
+	border-radius:10px 10px 0 0;
+	box-shadow: 0 0 3 0 rgba(0,0,0, .5);
+	border-left: 1px solid white;
+	border-right: 1px solid black;
+	padding:15px;
+	height: 100%;
+	text-align: center;
+	font-size: 1.1em;
+	font-weight: bold;
+	margin: 5px 5px 0 5px;
+}
+
+.tab:hover{
+	background: #00b09b;  /* fallback for old browsers */
+	background: -webkit-linear-gradient(left, #96c93d, #00b09b);
+	background: -moz-linear-gradient(left, #96c93d, #00b09b);
+	background: -o-linear-gradient(left, #96c93d, #00b09b);
+	background: linear-gradient(to right, #96c93d, #00b09b);  /* Chrome 10-25, Safari 5.1-6 */ /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+	box-shadow: 0 0 0 0 rgba(0,0,0, .5);
+	border-left: 1px solid black;
+	border-right: 1px solid white;
+}
+
+.navbar {
+	margin: 0 auto;
+	max-width:75%;
+	border-radius: 0;
+	background: #16A085;  /* fallback for old browsers */
+	background: #74ebd5;  /* fallback for old browsers */
+	background: -webkit-linear-gradient(left, #ACB6E5, #74ebd5);
+	background: -moz-linear-gradient(left, #ACB6E5, #74ebd5);
+	background: -o-linear-gradient(left, #ACB6E5, #74ebd5);
+	background: linear-gradient(to right, #ACB6E5, #74ebd5);  /* Chrome 10-25, Safari 5.1-6 */ /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+	color: white;
+	padding: 0;
+}
+
 .sectionlabel {
 	color: #4286f4;
 	font-size: 1.5em;
+}
+
+.banner {
+	max-height: 200px;
+	display: inline-block;
 }
 
 .section {
@@ -63,7 +123,6 @@ input {
 	background-color: white;
 	padding: 20px;
 	max-width: 75%;
-	margin-top: 25px;
 	padding: 20px;
 }
 
@@ -74,11 +133,13 @@ input {
 }
 
 #banner {
-	background-color: #4286f4;
+	background-color: white;
 	color: white;
-	margin-left: 40px;
-	margin-right: 40px;
-	padding: 0;
+	vertical-align: middle;
+	max-width:75%;
+	max-height:200px;
+	padding: 25px;
+	margin: 25px auto 0px;
 }
 
 #generate {
