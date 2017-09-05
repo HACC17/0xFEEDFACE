@@ -1,5 +1,10 @@
+/* This CSS Desparetely needs refactoring! Do it soon?*/
+
+
 body{
 	background-image: url("/images/bg-image-5.jpg");
+	background-size: stretch;
+	background-attachment: fixed;
 }
 
 input {
@@ -36,12 +41,18 @@ input {
 	margin: 5px 5px 0 5px;
 }
 
-.tab:hover{
+.tab-selected {
 	background: #00b09b;  /* fallback for old browsers */
 	background: -webkit-linear-gradient(left, #96c93d, #00b09b);
 	background: -moz-linear-gradient(left, #96c93d, #00b09b);
 	background: -o-linear-gradient(left, #96c93d, #00b09b);
 	background: linear-gradient(to right, #96c93d, #00b09b);  /* Chrome 10-25, Safari 5.1-6 */ /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+	box-shadow: 0 0 0 0 rgba(0,0,0, .5);
+	border-left: 1px solid black;
+	border-right: 1px solid white;
+}
+
+.tab:hover{
 	box-shadow: 0 0 0 0 rgba(0,0,0, .5);
 	border-left: 1px solid black;
 	border-right: 1px solid white;
@@ -104,6 +115,30 @@ input {
    margin:5px 0;
 }
 
+.hidden {
+	height: 0px;
+}
+
+.ealsurfer {
+	background-color: white;
+	padding: 20px;
+	padding-bottom: 50px;
+	max-width: 75%;
+}
+
+.admin {
+	text-align: center;
+	padding: auto;
+}
+
+
+.footer {
+	background-color: rgba(255, 255, 255, .8);
+	padding: 20px;
+	max-width: 75%;
+	margin-top: 10px;
+}
+
 #siteaddress {
 	width: 100%;
 }
@@ -118,13 +153,7 @@ input {
 }
 
 
-#EALSurfer {
-	box-shadow: 3px 3px 3px rgba(0,0,0, .5);
-	background-color: white;
-	padding: 20px;
-	max-width: 75%;
-	padding: 20px;
-}
+
 
 #finaleals {
 	background-color : #a986f9;

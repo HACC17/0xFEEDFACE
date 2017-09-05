@@ -2,8 +2,41 @@ var generate = document.getElementById("generate");
 var chemical = document.getElementById("chemical");
 var chemicalInputType = document.getElementById("chemicalInputType");
 var chemicalInputChoice= document.getElementsByName("chemicalInputType");
+var instructionstab = document.getElementById("instructionstab");
+var ealformtab = document.getElementById("ealformtab");
+var ealform = document.getElementById("submitted").innerHTML;
+var instructions = "<div class='container ealsurfer'>Instructions from the first tab of the Excel sheet will go here</div>";
 
 document.getElementById("chemicalinfotitle").innerHTML = chemical.value;
+
+//listen for incoming JSON string
+//turn back into JSON object
+//use for Final EAL Chemical references
+
+instructionstab.addEventListener("click", function(e){
+    if(!instructionstab.classList.contains("tab-selected")){
+        document.getElementsByClassName("tab-selected")[0].classList.toggle("tab-selected");
+        instructionstab.classList.toggle("tab-selected");
+        document.getElementById("submitted").innerHTML = instructions;
+    }
+});
+
+ealformtab.addEventListener("click", function(e){
+    if(!ealformtab.classList.contains("tab-selected")){
+        document.getElementsByClassName("tab-selected")[0].classList.toggle("tab-selected");
+        ealformtab.classList.toggle("tab-selected");
+        document.getElementById("submitted").innerHTML = ealform;
+        generate = document.getElementById("generate");
+        chemical = document.getElementById("chemical");
+        chemicalInputType = document.getElementById("chemicalInputType");
+        chemicalInputChoice= document.getElementsByName("chemicalInputType");
+        document.getElementById("chemicalinfotitle").innerHTML = chemical.value;
+        chemical.addEventListener("change", function(e){
+            chemical =  document.getElementById("chemical");
+            document.getElementById("chemicalinfotitle").innerHTML = chemical.value;
+        });
+    }
+})
 
 chemicalInputType.addEventListener("change", function(e){
     if(chemicalInputChoice[0].checked){

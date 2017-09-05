@@ -4,12 +4,28 @@ var app = express();
 
 app.use(express.static("public"));
 app.set("view engine", "ejs");
+
+var chemRef;
+var chemRefProcessor = function(XLSXFile){
+    //Read chemcial reference sheets
+    //save to chemRef
+}
+
+chemRefProcessor();
+
+//navigation
 app.get("/", function(req, res){
     res.send("<h1>HACC2017 0xFEEDFACE landing page.</h1><p>Expect great things.</p>");
 });
 
 app.get("/form", function(req, res){
+    //stringify chem ref and send it to client
     res.render("form")
+});
+
+app.get("/admin", function(req, res){
+   
+   res.render("admin"); 
 });
 
 app.get("/report/:data", function(req, res){
@@ -19,6 +35,9 @@ app.get("/report/:data", function(req, res){
     res.send("<h1>Your form is available at:</h1>");
 });
 
+/******************************************************************************
+* For later...                                                                *
+*******************************************************************************/
 
 app.get("/java/:statement", function(req, res){
    var statement = req.params.statement;
@@ -31,12 +50,15 @@ app.get("/java/:statement", function(req, res){
             console.log('stderr: ' + stderr);
              if(error !== null){
                 console.log('exec error: ' + error);
-    }
+        }
+    });
+   res.render("java", {statement: statement});
 });
 
-
-
-   res.render("java", {statement: statement});
+app.post("/uploads", function(req, res){
+    //upload new spread sheet file
+    
+    //process file and create chemical reference JSON
 });
 
 app.listen(process.env.PORT, process.env.IP, function() {

@@ -1,19 +1,16 @@
 <% include partials/header %>
-<div class="container surferpage" id="banner">
-  <div class="row banner"><a href="/form"><div class="container"><img src=""><h1>Hawaii Department of Health</h1></div></a></div>
-</div>
 <nav class="navbar" id="surfernav">
    <div class="container nav-std">
-     <div class="row nav-std">
+     <div class="row-flex nav-std">
        <div class="col-md-3 col-xs-10 nav-std"><h3><strong><a href="/form">EAL Surfer</a></strong></h3></div>
-       <div class="col-md-2 col-xs-10 tab">Instructions</div>
-       <div class="col-md-2 col-xs-10 tab">EAL Surfer Form</div>
+       <div class="col-md-2 col-xs-10 tab" id="instructionstab">Instructions</div>
+       <div class="col-md-2 col-xs-10 tab tab-selected" id="ealformtab">EAL Surfer Form</div>
        <div class="col-md-2 col-xs-10 tab">Detailed EALS</div>
      </div>
    </div>
 </nav>
 <div id="submitted">  
-  <div class="container" id="EALSurfer">
+  <div class="container ealsurfer">
     <div class="row flex">
       <div class="col-sm-8">
         <form id="siteform">
