@@ -1,6 +1,7 @@
 package xlreader;
 
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -301,6 +302,12 @@ public class XlReader {
         assert (Double) cells.get("B3") == 42.0;
     }
 
+    public void write(String filename) throws IOException {
+        FileOutputStream file = new FileOutputStream(filename);
+        this.workbook.write(file);
+        file.close();
+    }
+
     public static void main(String[] args) throws IOException {
 
         /* Check the command line arguments. */
@@ -313,9 +320,11 @@ public class XlReader {
         String filename = args[0];
 
         XlReader xlreader = new XlReader(filename);
+        xlreader.evaluateAll(2);
+        xlreader.write("testing.xlsx");
 
-        xlreader.testGetAllFormulae();
-        xlreader.testPopulate();
-        xlreader.testEvaluateAll();
+        //xlreader.testGetAllFormulae();
+        //xlreader.testPopulate();
+        //xlreader.testEvaluateAll();
     }
 }
