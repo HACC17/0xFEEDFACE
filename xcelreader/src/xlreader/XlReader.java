@@ -12,7 +12,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 
-
 /**
  * This class represents a set of excel documents.
  *
@@ -28,6 +27,7 @@ public class XlReader {
     private final Workbook workbook;
     private final ArrayList<Sheet> sheets;
     private final int nsheets;
+    private boolean evaluated;
 
     public XlReader(final String filename) throws IOException {
         this.filename = filename;
@@ -139,13 +139,16 @@ public class XlReader {
      *
      * @param   sheetnumber     the number of the sheet to get
      */
-    public void evaluateAll(final int sheetnumber) {
+    public FormulaEvaluator evaluateAll(final int sheetnumber) {
+        //if (this.evaluated = true) { return; }
         if (sheetnumber > this.nsheets) {
             System.exit(1);
         }
 
         FormulaEvaluator evaluator = this.workbook.getCreationHelper().createFormulaEvaluator();
         evaluator.evaluateAll();
+        this.evaluated = true;
+        return evaluator;
     }
 
     /**
@@ -252,37 +255,45 @@ public class XlReader {
         return success;
     }
 
-    private void toPdf(String filename) throws FileNotFoundException, DocumentException {
+    private void toPdf(String filename, FormulaEvaluator evaluator) throws FileNotFoundException, DocumentException {
         Sheet sheet4 = this.workbook.getSheetAt(4);
         Sheet sheet5 = this.workbook.getSheetAt(5);
-        Iterator<Sheet> sheetiter = this.workbook.iterator();
 
-        Iterator iter = sheet4.rowIterator();
+        Iterator iter = sheet5.rowIterator();
 
         Document pdf = new Document();
 
-        PdfWriter.getInstance(pdf, new FileOutputStream("test.pdf"));
+        PdfWriter.getInstance(pdf, new FileOutputStream(filename));
 
         pdf.open();
 
         PdfPTable table = new PdfPTable(8);
-        PdfPCell cell = null;
+        PdfPCell cell;
 
         while (iter.hasNext()) {
             Row row = (Row) iter.next();
             Iterator<Cell> celliter = row.cellIterator();
             while (celliter.hasNext()) {
                 Cell currentcell = celliter.next();
-                System.out.println(currentcell);
+
                 switch (currentcell.getCellTypeEnum()) {
                     case STRING:
                         cell = new PdfPCell(new Phrase(currentcell.getStringCellValue()));
                         table.addCell(cell);
                         break;
                     case NUMERIC:
+                        System.out.println(currentcell.getNumericCellValue());
+                        cell = new PdfPCell(new Phrase((float)currentcell.getNumericCellValue()));
                         table.addCell(cell);
-                        cell = new PdfPCell(new Phrase(""+currentcell.getNumericCellValue()));
-                    default:
+                        break;
+
+                     // It looks like the problem here is that itext is getting a string value here
+                     // and not the evaluated value.
+                     // UPDATE: actually it's getting numeric values and string values. Huh????
+                    case FORMULA:
+                        DataFormatter df = new DataFormatter();
+                        cell = new PdfPCell(new Phrase(df.formatCellValue(currentcell, evaluator)));
+                        table.addCell(cell);
                         break;
                 }
             }
@@ -361,13 +372,15 @@ public class XlReader {
         XlReader xlreader = new XlReader(filename);
 
         // Evaluate the data.
-        xlreader.evaluateAll(2);
+        FormulaEvaluator evaluator = xlreader.evaluateAll(2);
+
 
         // Write it to xlsx.
         xlreader.write("testing.xlsx");
-
         // Write it to pdf.
-        xlreader.toPdf("testing.pdf");
+
+        xlreader.toPdf("testing.pdf", evaluator);
+
 
         //xlreader.testGetAllFormulae();
         //xlreader.testPopulate();
