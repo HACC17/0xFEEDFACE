@@ -4,3 +4,6 @@ lib/poi-3.16/docs/
 out/
 *.class
 .~lock.*
+*.iml
+*.pdf
+ReportExample/

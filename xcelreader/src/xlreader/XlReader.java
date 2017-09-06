@@ -1,8 +1,6 @@
 package xlreader;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -11,6 +9,8 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.*;
 
 
 /**
@@ -252,6 +252,45 @@ public class XlReader {
         return success;
     }
 
+    private void toPdf(String filename) throws FileNotFoundException, DocumentException {
+        Sheet sheet4 = this.workbook.getSheetAt(4);
+        Sheet sheet5 = this.workbook.getSheetAt(5);
+        Iterator<Sheet> sheetiter = this.workbook.iterator();
+
+        Iterator iter = sheet4.rowIterator();
+
+        Document pdf = new Document();
+
+        PdfWriter.getInstance(pdf, new FileOutputStream("test.pdf"));
+
+        pdf.open();
+
+        PdfPTable table = new PdfPTable(8);
+        PdfPCell cell = null;
+
+        while (iter.hasNext()) {
+            Row row = (Row) iter.next();
+            Iterator<Cell> celliter = row.cellIterator();
+            while (celliter.hasNext()) {
+                Cell currentcell = celliter.next();
+                System.out.println(currentcell);
+                switch (currentcell.getCellTypeEnum()) {
+                    case STRING:
+                        cell = new PdfPCell(new Phrase(currentcell.getStringCellValue()));
+                        table.addCell(cell);
+                        break;
+                    case NUMERIC:
+                        table.addCell(cell);
+                        cell = new PdfPCell(new Phrase(""+currentcell.getNumericCellValue()));
+                    default:
+                        break;
+                }
+            }
+        }
+        pdf.add(table);
+        pdf.close();
+    }
+
     /***************************************************************
      * Here begin the tests. They shouldn't be here, but they are. *
      ***************************************************************/
@@ -308,7 +347,7 @@ public class XlReader {
         file.close();
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, DocumentException {
 
         /* Check the command line arguments. */
         if (args.length != 1) {
@@ -320,8 +359,15 @@ public class XlReader {
         String filename = args[0];
 
         XlReader xlreader = new XlReader(filename);
+
+        // Evaluate the data.
         xlreader.evaluateAll(2);
+
+        // Write it to xlsx.
         xlreader.write("testing.xlsx");
+
+        // Write it to pdf.
+        xlreader.toPdf("testing.pdf");
 
         //xlreader.testGetAllFormulae();
         //xlreader.testPopulate();
