@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
@@ -30,8 +31,8 @@ public class XlReader {
     public XlReader(final String filename) throws IOException {
         this.filename = filename;
         this.workbook = makeWorkBooks();
-        this.sheets = makeSheets();
-        this.nsheets = this.workbook.getNumberOfSheets();
+        this.sheets   = makeSheets();
+        this.nsheets  = this.workbook.getNumberOfSheets();
     }
 
     /**
@@ -39,7 +40,9 @@ public class XlReader {
      */
     private ArrayList<Sheet> makeSheets() {
         ArrayList<Sheet> sheets = new ArrayList<>();
-        this.workbook.forEach(sheet -> sheets.add(sheet));
+
+        /* This is weird and cool checkout Java method references. */
+        this.workbook.forEach(sheets::add);
         return sheets;
     }
 
@@ -310,13 +313,6 @@ public class XlReader {
         String filename = args[0];
 
         XlReader xlreader = new XlReader(filename);
-
-        //xlreader.findAllFormulae();
-        //xlreader.evaluateFormula(0, "A3");
-
-        //String[] cells = {"D5", "D7", "D10", "D14", "C16", "D22", "D24", "D26"};
-        //HashMap vals = xlreader.getCellValue(2, cells);
-        //vals.forEach((k, v) -> System.out.format("Cell: %s   Value: %s\n", k, v));
 
         xlreader.testGetAllFormulae();
         xlreader.testPopulate();
