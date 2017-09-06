@@ -263,49 +263,46 @@ public class XlReader {
     }
 
     private void toPdf(String filename, FormulaEvaluator evaluator) throws FileNotFoundException, DocumentException {
-        Sheet sheet4 = this.workbook.getSheetAt(4);
-        Sheet sheet5 = this.workbook.getSheetAt(5);
-
-        Iterator iter = sheet5.rowIterator();
-
         Document pdf = new Document();
-
         PdfWriter.getInstance(pdf, new FileOutputStream(filename));
-
         pdf.open();
-
         PdfPTable table = new PdfPTable(8);
         PdfPCell cell;
+        Sheet[] sheets = {this.workbook.getSheetAt(4), this.workbook.getSheetAt(5)};
 
-        while (iter.hasNext()) {
-            Row row = (Row) iter.next();
-            Iterator<Cell> celliter = row.cellIterator();
-            while (celliter.hasNext()) {
-                Cell currentcell = celliter.next();
+        for (Sheet s : sheets) {
+            Iterator iter = s.rowIterator();
 
-                switch (currentcell.getCellTypeEnum()) {
-                    case STRING:
-                        cell = new PdfPCell(new Phrase(currentcell.getStringCellValue()));
-                        table.addCell(cell);
-                        break;
-                    case NUMERIC:
-                        System.out.println(currentcell.getNumericCellValue());
-                        cell = new PdfPCell(new Phrase((float)currentcell.getNumericCellValue()));
-                        table.addCell(cell);
-                        break;
+            while (iter.hasNext()) {
+                Row row = (Row) iter.next();
+                Iterator<Cell> celliter = row.cellIterator();
+                while (celliter.hasNext()) {
+                    Cell currentcell = celliter.next();
 
-                     // It looks like the problem here is that itext is getting a string value here
-                     // and not the evaluated value.
-                     // UPDATE: actually it's getting numeric values and string values. Huh????
-                    case FORMULA:
-                        DataFormatter df = new DataFormatter();
-                        cell = new PdfPCell(new Phrase(df.formatCellValue(currentcell, evaluator)));
-                        table.addCell(cell);
-                        break;
+                    switch (currentcell.getCellTypeEnum()) {
+                        case STRING:
+                            cell = new PdfPCell(new Phrase(currentcell.getStringCellValue()));
+                            table.addCell(cell);
+                            break;
+                        case NUMERIC:
+                            System.out.println(currentcell.getNumericCellValue());
+                            cell = new PdfPCell(new Phrase((float) currentcell.getNumericCellValue()));
+                            table.addCell(cell);
+                            break;
+
+                        // It looks like the problem here is that itext is getting a string value here
+                        // and not the evaluated value.
+                        // UPDATE: actually it's getting numeric values and string values. Huh????
+                        case FORMULA:
+                            DataFormatter df = new DataFormatter();
+                            cell = new PdfPCell(new Phrase(df.formatCellValue(currentcell, evaluator)));
+                            table.addCell(cell);
+                            break;
+                    }
                 }
             }
+            pdf.add(table);
         }
-        pdf.add(table);
         pdf.close();
     }
 
