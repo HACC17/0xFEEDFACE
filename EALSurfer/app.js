@@ -61,7 +61,6 @@ app.get("/form", function(req, res){
 });
 
 app.get("/admin", function(req, res){
-   
    res.render("admin"); 
 });
 

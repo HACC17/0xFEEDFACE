@@ -1,18 +1,27 @@
 <% include partials/header %>
-<nav class="navbar" id="surfernav">
-   <div class="container nav-std">
-     <div class="row nav-std">
-       <div class="col-md-3 col-xs-10 nav-std"><h3><strong><a href="/form">EAL Surfer</a></strong></h3></div>
-     </div>
-   </div>
-</nav>
-<div class="container ealsurfer admin">
-    <div class="row-flex">
-        <h3>Master Spreadsheet File Upload</h3>
+<div class="container displayarea">
+    <div class="row admin" id="displaytitle">
+        <h3>Master Spreadsheet Upload</h3>
         <p>Click below to upload the current EAL Surfer Excel spreadsheet file. <br>(Note: This file will overwrite the existing file.)</p>
-        <label class="btn btn-default btn-file">
-            Choose File <input type="file" style="display: none;">
-        </label>
     </div>
-</div>
+		<div class="row">
+    <!-- Notes / HU Display -->
+		<div class="col s12 m4 push-m8 push-l10">
+			<h5>Attention</h5>
+			<ol>
+			    <li>File extension must be xlsx. (example.xlsx) </li>
+			    <li>If there are extensive format-changes or sheet tabs have changed index please contact the system administrator before uploading.</li>
+			</ol>
+		</div>
+      <!--Form Display Area -->
+		<div class="col s12 m8 pull-m4 pull-l2">
+     
+		</div>
+	</div>
+
+
+
+
+
+
 <% include partials/footer %>

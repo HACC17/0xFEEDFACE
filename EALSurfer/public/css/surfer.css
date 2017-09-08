@@ -1,6 +1,4 @@
-.fixed {
-  width: 260px;
-}
+
 
 /* This CSS Desparetely needs refactoring! Do it soon?*/
 
@@ -12,17 +10,14 @@ label {
   font-size: 2em;
 }
 
+#displaytitle {
+  text-align:center;
+  
+}
+
 .fixed {
+  width: 260px;
   padding-top: 50px;
-}
-
-.sectionlabel {
-  color: #4286f4;
-  font-size: 1.5em;
-}
-
-.section {
- width:100%;
 }
 
 .infoblock {
@@ -34,10 +29,6 @@ label {
   font-size:.8em;
 }
 
-.spacer {
-  height: 20em;
-}
-
 .output {
   text-align: right;
 }
@@ -46,20 +37,8 @@ label {
   text-align: center;
 }
 
-.form-group > * {
-   margin:5px 0;
-}
-
 .hidden {
   height: 0px;
-}
-
-.ealsurfer {
-  background-color: white;
-  padding: 20px;
-  padding-bottom: 50px;
-  width: 100%;
-  margin: 50px;
 }
 
 .admin {
@@ -74,17 +53,13 @@ label {
   margin-top: 10px;
 }
 
-#siteaddress {
-  width: 100%;
+.material-icons{
+    display: inline-flex;
+    vertical-align: top;
 }
-#sitename {
-  width: 100%;
-}
-#sitezip {
-  max-width: 100px;
-}
-#sitedate{
-  max-width: 200px;
+
+#warning {
+  height: 200px;
 }
 
 #finaleals {
@@ -93,13 +68,3 @@ label {
   color: white;
 }
 
-
-#generate {
-  max-width: 200px;
-  margin: auto;
-}
-
-#generate:hover {
-  background-color:#1e6ded;
-  color: black;
-}
