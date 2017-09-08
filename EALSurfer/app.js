@@ -60,8 +60,16 @@ app.get("/form", function(req, res){
     res.render("form", {chemList : chemicals});
 });
 
+app.get("/instructions", function(req, res){
+   res.render("instructions"); 
+});
+
 app.get("/admin", function(req, res){
    res.render("admin"); 
+});
+
+app.get("/download", function(req, res){
+   res.render("download"); 
 });
 
 app.get("/report/:data", function(req, res){

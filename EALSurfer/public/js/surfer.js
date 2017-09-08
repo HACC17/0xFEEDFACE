@@ -9,14 +9,6 @@ $( document ).ready(function() {
       draggable: true,    
    });
 
-   $("#instructionstab").click(function(event){
-        event.preventDefault();
-   });
-
-   $("ealsurfertab").click(function(event){
-        event.preventDefault();
-   })
-
    $("#chemical").change(function(event){
         if($("#chemical")[0].selectedIndex > 0){
             var chemindex = $("#chemical")[0].selectedIndex;

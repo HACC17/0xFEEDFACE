@@ -21,12 +21,12 @@ label {
 }
 
 .infoblock {
+  background-color: #E0EEEE;
   border-radius: 2px;
   box-shadow: 1px 1px 1px rgba(0,0,0, .7);
   padding: 5px;
   width: 100%;
   margin: 10px 0;
-  font-size:.8em;
 }
 
 .output {
@@ -62,9 +62,4 @@ label {
   height: 200px;
 }
 
-#finaleals {
-  background-color : #a986f9;
-  vertical-align: bottom;
-  color: white;
-}
 
