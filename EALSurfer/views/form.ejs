@@ -1,124 +1,148 @@
 <% include partials/header %>
-<nav class="navbar" id="surfernav">
-   <div class="container nav-std">
-     <div class="row-flex nav-std">
-       <div class="col-md-3 col-xs-10 nav-std"><h3><strong><a href="/form">EAL Surfer</a></strong></h3></div>
-       <div class="col-md-2 col-xs-10 tab" id="instructionstab">Instructions</div>
-       <div class="col-md-2 col-xs-10 tab tab-selected" id="ealformtab">EAL Surfer Form</div>
-       <div class="col-md-2 col-xs-10 tab">Detailed EALS</div>
-     </div>
-   </div>
-</nav>
-<div id="submitted">  
-  <div class="container ealsurfer">
-    <div class="row flex">
-      <div class="col-sm-8">
-        <form id="siteform">
-          <label class="sectionlabel" for="siteinfo">Site Information</label>
-          <div class="container form-group section" id="siteinfo">
-            <div class="form-group form-inline">
-              <label>Site Identification</label><br>
-              <input type="text" class="form-control" placeholder="Site Name" id="sitename"></input>
-              <br>
-              <input type="text" class="form-control" placeholder="Site Address" id="siteaddress"></input>
-              <br>
-              <input type="text" class="form-control" placeholder="City" id="sitecity"></input>
-              <input type="text" class="form-control" placeholder="State" id="sitestate"></input>
-              <input type="text" class="form-control" placeholder="Zip Code" id="sitezip"></input>
-              <br>
-              <label for="sitedate">Date of EAL Search:</label>
-              <input type="date" class="form-control" paceholder="date" id="sitedate"></input>
-            </div>
-          </div>
-          <hr>
-        </form>
-      </div>
-      <div class="col-sm-4">
-        <div class="infoblock">
-          <h6 class="infotitle">Reference</p></h6>
-          <p>
-            HDOH 2016, Evaluation of Environmental Hazards at Sites with Contaminated Soil and Groundwater (Summer 2016): Hawai'i Department of Health, Hazard Evaluation and Emergency Response, <a href="http://hawaii.gov/health/environmental/hazard/index.html">Hawaii DOH</a>								
-          </p>
-        </div>
-      </div>
+<body>
+	<!-- Menu region -->
+	<ul id="slide-out" class="side-nav fixed">
+		<li><a href="#!" style="font-size:1.25em">EAL Surfer +</a></li>
+	  	<li id="instructionstab"><a href="#!">Instructions</a></li>
+	  	<li id="ealformtab"><a href="#!">EAL Surfer Form</a></li>
+		<li><a href="#!">References</a></li>
+		<li><a href="#!">Admin</a></li>
+	</ul>
+	<a href="#" data-activates="slide-out" class="button-collapse"><i class="material-icons">EAL Surfer +</i></a>
+<!-- Display Region -->
+
+	<div class="container displayarea">
+    <!-- Display Title Banner -->
+    <div class="row" id="displaytitle">
+
     </div>
-    <div class="row flex">
-      <div class="col-sm-8">
-        <form id="chemicalform">
-          <label class="sectionlabel" for="step1">Select Site Scenario</label>
-          <div class="container form-group section" id="step1">
-            <label for="landUse">Land Use</label>
-            <select class="form-control" id="landUse">
-              <option>Unrestricted</option>
-              <option>Commercial/Industrial Use Onlys</option>
-            </select>
-            <label for="groundWaterUtility">Groundwater Utility</label>
-            <select class="form-control" id="groundWaterUtility">
-              <option>Drinking Water Resrouce</option>
-              <option>Nondrinking Water Resorce</option>
-            </select>
-            <label for="distanceToWater">Distance To Nearest Surface Water Body</label>
-            <select class="form-control" id="distanceToWater">
-              <option> &lt150m</option>
-              <option>&lt150m</option>
-            </select>
-          </div>
-          <hr>
-          <label class="sectionlabel" for="step2">Select Contaminant</label>
-          <div class="container form-group section" id="step2">
-            <label class="form-check-label" for="chemicalInputType"> Chemical Input Type </label>
-            <div id="chemicalInputType">
-              <input class="form-check-input" type="radio" name="chemicalInputType" value="name" checked> Chemical Name
-              <input class="form-check-input" type="radio" name="chemicalInputType" value="cas"> CAS#
-            </div>
-            <select class="form-control" id="chemical" placeholder="Chemical">
-              <option>ACENAPHTHENE</option><option>ACENAPHTHYLENE</option><option>ACETONE</option><option>ALDRIN</option><option>AMETRYN</option><option>AMINO,2- DINITROTOLUENE,4,6-</option><option>AMINO,4- DINITROTOLUENE,2,6-</option><option>ANTHRACENE</option><option>ANTIMONY</option><option>ARSENIC</option><option>ATRAZINE</option><option>BARIUM</option><option>BENOMYL</option><option>BENZENE</option><option>BENZO(a)ANTHRACENE</option><option>BENZO(a)PYRENE</option><option>BENZO(b)FLUORANTHENE</option><option>BENZO(g,h,i)PERYLENE</option><option>BENZO(k)FLUORANTHENE</option><option>BERYLLIUM</option><option>BIPHENYL, 1,1-</option><option>BIS(2-CHLOROETHYL)ETHER</option><option>BIS(2-CHLORO-1-METHYLETHYL)ETHER</option><option>BIS(2-ETHYLHEXYL)PHTHALATE</option><option>BORON</option><option>BROMODICHLOROMETHANE</option><option>BROMOFORM</option><option>BROMOMETHANE</option><option>CADMIUM</option><option>CARBON TETRACHLORIDE</option><option>CHLORDANE (TECHNICAL)</option><option>CHLOROANILINE, p-</option><option>CHLOROBENZENE</option><option>CHLOROETHANE</option><option>CHLOROFORM</option><option>CHLOROMETHANE</option><option>CHLOROPHENOL, 2-</option><option>CHROMIUM (Total)</option><option>CHROMIUM III</option><option>CHROMIUM VI</option><option>CHRYSENE</option><option>COBALT</option><option>COPPER</option><option>CYANIDE (Free)</option><option>CYCLO-1,3,5-TRIMETHYLENE-2,4,6-TRINITRAMINE (RDX)</option><option>DALAPON</option><option>DIBENZO(a,h)ANTHTRACENE</option><option>DIBROMO-3-CHLOROPROPANE, 1,2-</option><option>DIBROMOCHLOROMETHANE</option><option>DIBROMOETHANE, 1,2-</option><option>DICHLOROBENZENE, 1,2-</option><option>DICHLOROBENZENE, 1,3-</option><option>DICHLOROBENZENE, 1,4-</option><option>DICHLOROBENZIDINE, 3,3-</option><option>DICHLORODIPHENYLDICHLOROETHANE (DDD)</option><option>DICHLORODIPHENYLDICHLOROETHYLENE (DDE)</option><option>DICHLORODIPHENYLTRICHLOROETHANE (DDT)</option><option>DICHLOROETHANE, 1,1-</option><option>DICHLOROETHANE, 1,2-</option><option>DICHLOROETHYLENE, 1,1-</option><option>DICHLOROETHYLENE, Cis 1,2-</option><option>DICHLOROETHYLENE, Trans 1,2-</option><option>DICHLOROPHENOL, 2,4-</option><option>DICHLOROPHENOXYACETIC ACID (2,4-D)</option><option>DICHLOROPROPANE, 1,2-</option><option>DICHLOROPROPENE, 1,3-</option><option>DIELDRIN</option><option>DIETHYLPHTHALATE</option><option>DIMETHYLPHENOL, 2,4-</option><option>DIMETHYLPHTHALATE</option><option>DINITROBENZENE, 1,3-</option><option>DINITROPHENOL, 2,4-</option><option>DINITROTOLUENE, 2,4- (2,4-DNT)</option><option>DINITROTOLUENE, 2,6- (2,6-DNT)</option><option>DIOXANE, 1,4-</option><option>DIOXINS (TEQ)</option><option>DIURON</option><option>ENDOSULFAN</option><option>ENDRIN</option><option>ETHANOL</option><option>ETHYLBENZENE</option><option>FLUORANTHENE</option><option>FLUORENE</option><option>GLYPHOSATE</option><option>HEPTACHLOR</option><option>HEPTACHLOR EPOXIDE</option><option>HEXACHLOROBENZENE</option><option>HEXACHLOROBUTADIENE</option><option>HEXACHLOROCYCLOHEXANE (gamma) LINDANE</option><option>HEXACHLOROETHANE</option><option>HEXAZINONE</option><option>INDENO(1,2,3-cd)PYRENE</option><option>ISOPHORONE</option><option>LEAD</option><option>MERCURY</option><option>METHOXYCHLOR</option><option>METHYL ETHYL KETONE</option><option>METHYL ISOBUTYL KETONE</option><option>METHYL MERCURY</option><option>METHYL TERT BUTYL ETHER</option><option>METHYLENE CHLORIDE</option><option>METHYLNAPHTHALENE, 1-</option><option>METHYLNAPHTHALENE, 2-</option><option>MOLYBDENUM</option><option>NAPHTHALENE</option><option>NICKEL</option><option>NITROBENZENE</option><option>NITROGLYCERIN</option><option>NITROTOLUENE, 2-</option><option>NITROTOLUENE, 3-</option><option>NITROTOLUENE, 4-</option><option>PENTACHLOROPHENOL</option><option>PENTAERYTHRITOLTETRANITRATE (PETN)</option><option>PERCHLORATE</option><option>PHENANTHRENE</option><option>PHENOL</option><option>POLYCHLORINATED BIPHENYLS (PCBs)</option><option>PROPICONAZOLE</option><option>PYRENE</option><option>SELENIUM</option><option>SILVER</option><option>SIMAZINE</option><option>STYRENE</option><option>TERBACIL</option><option>tert-BUTYL ALCOHOL</option><option>TETRACHLOROETHANE, 1,1,1,2-</option><option>TETRACHLOROETHANE, 1,1,2,2-</option><option>TETRACHLOROETHYLENE</option><option>TETRACHLOROPHENOL, 2,3,4,6-</option><option>TETRANITRO-1,3,5,7-TETRAAZOCYCLOOCTANE (HMX)</option><option>THALLIUM</option><option>TOLUENE</option><option>TOXAPHENE</option><option>TPH (gasolines)</option><option>TPH (middle distillates)</option><option>TPH (residual fuels)</option><option>TRICHLOROBENZENE, 1,2,4-</option><option>TRICHLOROETHANE, 1,1,1-</option><option>TRICHLOROETHANE, 1,1,2-</option><option>TRICHLOROETHYLENE</option><option>TRICHLOROPHENOL, 2,4,5-</option><option>TRICHLOROPHENOL, 2,4,6-</option><option>TRICHLOROPHENOXYACETIC ACID, 2,4,5- (2,4,5-T)</option><option>TRICHLOROPHENOXYPROPIONIC ACID, 2,4,5- (2,4,5-TP)</option><option>TRICHLOROPROPANE, 1,2,3-</option><option>TRICHLOROPROPENE, 1,2,3-</option><option>TRIFLURALIN</option><option>TRINITROBENZENE, 1,3,5-</option><option>TRINITROPHENYLMETHYLNITRAMINE, 2,4,6- (TETRYL)</option><option>TRINITROTOLUENE, 2,4,6- (TNT)</option><option>VANADIUM</option><option>VINYL CHLORIDE</option><option>XYLENES</option>
-            </select>
-          </div>
-          <hr>
-          <label class="sectionlabel" for="step3">Enter Site Data</label>
-          <div class="container form-group form-inline section" id="step3">
-            <label>Chemical Concentrations</label><br>
-            <input type="number" class="form-control" placeholder="Soil (mg/kg)" id="soil">
-            <input type="number" class="form-control" placeholder="Groundwater (&#956g/kg)"id="groundWater">
-            <input type="number" class="form-control" placeholder="Soil Vapor (&#956g/kg)" id="soilVapor">
-          </div>
-          <button type="button" class="btn btn-primary btn-lg btn-block" id="generate">Generate Forms</button>
-        </form>
-      </div>
-      <div class="col-sm-4">
-        <div class="row spacer">
-          <div class="col" id="warning"></div>
-        </div>
-        <div class="row flex">
-          <div class="infoblock" id="finaleals">
-            <h4 class="infotitle" id="chemicalinfotitle"></h4>
-            <h6 class="infotitle">Final EALs</p></h6>
+		<div class="row">
+    <!-- Notes / HU Display -->
+			<div class="col s12 m4 push-m8 push-l10">
+				<div class="section">
+          			<h6 class="infotitle">Reference</p></h6>
+			          <p>
+			            HDOH 2016, Evaluation of Environmental Hazards at Sites with Contaminated Soil and Groundwater (Summer 2016): Hawai'i Department of Health, Hazard Evaluation and Emergency Response, <a href="http://hawaii.gov/health/environmental/hazard/index.html">Hawaii DOH</a>			
+			          </p>
+				</div>
+				<div class="divider"></div>
+        <div class="col" id="warning"></div>
+				<div class="section">
+					<div class="infoblock" id="finaleals">
+            <h6 class="infotitle" style="font-size:1.5em" id="chemicalinfotitle"></h6>
+            <h6 class="infotitle">Final EALs</h6>
             <hr>
-            <div class="row flex">
-              <div class="col-sm-6">
+            <div class="row">
+              <div class="col m8">
                 <p>Soil (mg/kg)</p>
                 <p>Groundwater (ug/kg)</p>
                 <p>Soil Vapor (ug/kg)</p>
               </div>
-              <div class="col-sm-6 output">
-                <p>.01</p>
-                <p>.0001</p>
-                <p>.000001</p>
+              <div class="col m4">
+                <p style="text-align: right">.01</p>
+                <p style="text-align: right">.0001</p>
+                <p style="text-align: right">.000001</p>
               </div>
             </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="infoblock" id="notes">
-            <h4 class="infotitle" id="chemicalinfotitle"></h4>
+				</div>
+				<div class="divider"></div>
+				<div class="section">
+					<div id="notes">
             <h6 class="infotitle">Notes</p></h6>
-            <hr>
             <p>Chemical specifc notes will go here. The Excel Document responds to the users choice in the chemical dropdown list and changes the note.</p>
+          </div>
+				</div>
+			</div>
+      <!--Form Display Area -->
+		<div class="col s12 m8 pull-m4 pull-l2">
+      <div class="section">
+        <div class="row">
+          <h5>Site Information</h5>
+          <div class="input-field col s12 m8">
+            <input type="text" placeholder="Site Name" id="sitename"></input>
+            <label for="sitename">Site Name</label>
+          </div>
+          <div class="input-field col s12 m4">
+                    <input type="date" id="sitedate"></input>
+                    <label for="sitedate" class="active" >Date of Search:</label>
+          </div>
+          <div class="input-field col s12">
+            <input type="text" placeholder="Site Address" id="siteaddress"></input>
+            <label for="siteaddress">Site Address</label>
+          </div>
+            <div class="col s12">
+              <div class="row">
+              <div class="input-field col s6">
+                <input type="text" placeholder="City" id="sitecity"></input>
+                <label for="sitecity">City</label>
+              </div>
+              <div class="input-field col s2">
+                <input type="text" placeholder="State" id="sitestate"></input>
+                <label for="sitecity">State</label>
+              </div>
+              <div class="input-field col s4">
+                <input type="text" placeholder="Zip" id="sitezip"></input>
+                <label for="sitecity">Zipcode</label>
+              </div>
+              </div>
+            </div>
+        </div>
+      </div>
+			<div class="section">
+				<div class="row">
+          <h5>Site Scenario</h5>
+            <div class="input-field col s6">
+              <select id="landuse">
+                <option value="1">Unrestricted</option>
+                <option value="2">Commercial/Industrial Use Onlys</option>
+              </select>
+              <label>Land Use</label>
+            </div>
+            <div class="input-field col s6">
+              <select id="groundwaterutility">
+                <option>Drinking Water Resrouce</option>
+                <option>Nondrinking Water Resorce</option>
+              </select>
+              <label>Groundwater Utility</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-field col s6">
+            <select id="distanceToWater">
+              <option> &lt150m</option>
+              <option>&lt150m</option>
+            </select>
+            <label>Distance To Nearest Surface Water Body</label>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</div>
+      <div class="section"></div>
+				<div class="row">
+					<h5>Select Contaminant</h5>
+          <div class="input-field col s3">
+            <select id="chemicalInputType">
+              <option>Chemical Name</option>
+              <option>CAS #</option>
+            </select>
+            <label> Chemical Input Type </label>
+          </div>
+          <div class="input-field col s9">
+             <select id="chemical">
+              <option>test</option>
+              <option>test1</option>
+              <option>test2</option>
+              <option>test3</option>
+             </select>
+             <label>Contaminant</label>
+          </div>
+				</div>
+			</div>
+      <div class="row">
+        <div class="col s2 push-s5">
+           <a class="waves-effect waves-light btn-large">Submit<i class="material-icons right">send</i></a>
+        </div>
+      </div>
+		</div>
+	</div>
 <%include partials/footer%>

@@ -1,0 +1,105 @@
+.fixed {
+  width: 260px;
+}
+
+/* This CSS Desparetely needs refactoring! Do it soon?*/
+
+input {
+  box-sizing: border-box;
+}
+
+label {
+  font-size: 2em;
+}
+
+.fixed {
+  padding-top: 50px;
+}
+
+.sectionlabel {
+  color: #4286f4;
+  font-size: 1.5em;
+}
+
+.section {
+ width:100%;
+}
+
+.infoblock {
+  border-radius: 2px;
+  box-shadow: 1px 1px 1px rgba(0,0,0, .7);
+  padding: 5px;
+  width: 100%;
+  margin: 10px 0;
+  font-size:.8em;
+}
+
+.spacer {
+  height: 20em;
+}
+
+.output {
+  text-align: right;
+}
+
+.infotitle {
+  text-align: center;
+}
+
+.form-group > * {
+   margin:5px 0;
+}
+
+.hidden {
+  height: 0px;
+}
+
+.ealsurfer {
+  background-color: white;
+  padding: 20px;
+  padding-bottom: 50px;
+  width: 100%;
+  margin: 50px;
+}
+
+.admin {
+  text-align: center;
+  padding: auto;
+}
+
+.footer {
+  background-color: rgba(255, 255, 255, .8);
+  padding: 20px;
+  max-width: 100%;
+  margin-top: 10px;
+}
+
+#siteaddress {
+  width: 100%;
+}
+#sitename {
+  width: 100%;
+}
+#sitezip {
+  max-width: 100px;
+}
+#sitedate{
+  max-width: 200px;
+}
+
+#finaleals {
+  background-color : #a986f9;
+  vertical-align: bottom;
+  color: white;
+}
+
+
+#generate {
+  max-width: 200px;
+  margin: auto;
+}
+
+#generate:hover {
+  background-color:#1e6ded;
+  color: black;
+}
