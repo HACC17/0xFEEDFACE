@@ -18,7 +18,21 @@ $( document ).ready(function() {
    })
 
    $("#chemical").change(function(event){
-        $("#chemicalinfotitle").html(event.target.value);
+        var chemindex = $("#chemical")[0].selectedIndex;
+        var drinking = $("#groundwaterutility")[0].selectedIndex;
+        var distance = $("#distancetowater")[0].selectedIndex;
+        var xhttp = new XMLHttpRequest();
+        var data;
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                data = JSON.parse(this.responseText);
+                console.log(data);
+                $("#chemicalinfotitle").html(event.target.value);
+                $("#refeals").html(data);
+            }
+        };
+        xhttp.open("GET", "/chemdata/"+chemindex+"/"+drinking+"/"+distance, true);
+        xhttp.send();
    })
  
 });

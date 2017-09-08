@@ -38,10 +38,8 @@
                 <p>Groundwater (ug/kg)</p>
                 <p>Soil Vapor (ug/kg)</p>
               </div>
-              <div class="col m4">
-                <p style="text-align: right">.01</p>
-                <p style="text-align: right">.0001</p>
-                <p style="text-align: right">.000001</p>
+              <div class="col m4" id="refeals">
+                
               </div>
             </div>
           </div>
@@ -101,17 +99,17 @@
             </div>
             <div class="input-field col s6">
               <select id="groundwaterutility">
-                <option>Drinking Water Resrouce</option>
-                <option>Nondrinking Water Resorce</option>
+                <option value="1">Drinking Water Resrouce</option>
+                <option value="2">Nondrinking Water Resorce</option>
               </select>
               <label>Groundwater Utility</label>
             </div>
           </div>
           <div class="row">
             <div class="input-field col s6">
-            <select id="distanceToWater">
-              <option> &lt150m</option>
-              <option>&lt150m</option>
+            <select id="distancetowater">
+              <option value="1">&gt150m</option>
+              <option value="2"> &le;150m</option>
             </select>
             <label>Distance To Nearest Surface Water Body</label>
           </div>
@@ -122,17 +120,14 @@
 					<h5>Select Contaminant</h5>
           <div class="input-field col s3">
             <select id="chemicalInputType">
-              <option>Chemical Name</option>
-              <option>CAS #</option>
+              <option value="1">Chemical Name</option>
+              <option value="2">CAS #</option>
             </select>
             <label> Chemical Input Type </label>
           </div>
           <div class="input-field col s9">
              <select id="chemical">
-              <option>test</option>
-              <option>test1</option>
-              <option>test2</option>
-              <option>test3</option>
+              <%-JSON.parse(chemList)%>
              </select>
              <label>Contaminant</label>
           </div>
