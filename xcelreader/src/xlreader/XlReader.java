@@ -1,7 +1,6 @@
 package xlreader;
 
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -10,7 +9,8 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.*;
 
 /**
  * This class represents a set of excel documents.
@@ -27,6 +27,7 @@ public class XlReader {
     private final Workbook workbook;
     private final ArrayList<Sheet> sheets;
     private final int nsheets;
+    private boolean evaluated;
 
     public XlReader(final String filename) throws IOException {
         this.filename = filename;
@@ -138,13 +139,16 @@ public class XlReader {
      *
      * @param   sheetnumber     the number of the sheet to get
      */
-    public void evaluateAll(final int sheetnumber) {
+    public FormulaEvaluator evaluateAll(final int sheetnumber) {
+        //if (this.evaluated = true) { return; }
         if (sheetnumber > this.nsheets) {
             System.exit(1);
         }
 
         FormulaEvaluator evaluator = this.workbook.getCreationHelper().createFormulaEvaluator();
         evaluator.evaluateAll();
+        this.evaluated = true;
+        return evaluator;
     }
 
     /**
@@ -251,6 +255,53 @@ public class XlReader {
         return success;
     }
 
+    private void toPdf(String filename, FormulaEvaluator evaluator) throws FileNotFoundException, DocumentException {
+        Sheet sheet4 = this.workbook.getSheetAt(4);
+        Sheet sheet5 = this.workbook.getSheetAt(5);
+
+        Iterator iter = sheet5.rowIterator();
+
+        Document pdf = new Document();
+
+        PdfWriter.getInstance(pdf, new FileOutputStream(filename));
+
+        pdf.open();
+
+        PdfPTable table = new PdfPTable(8);
+        PdfPCell cell;
+
+        while (iter.hasNext()) {
+            Row row = (Row) iter.next();
+            Iterator<Cell> celliter = row.cellIterator();
+            while (celliter.hasNext()) {
+                Cell currentcell = celliter.next();
+
+                switch (currentcell.getCellTypeEnum()) {
+                    case STRING:
+                        cell = new PdfPCell(new Phrase(currentcell.getStringCellValue()));
+                        table.addCell(cell);
+                        break;
+                    case NUMERIC:
+                        System.out.println(currentcell.getNumericCellValue());
+                        cell = new PdfPCell(new Phrase((float)currentcell.getNumericCellValue()));
+                        table.addCell(cell);
+                        break;
+
+                     // It looks like the problem here is that itext is getting a string value here
+                     // and not the evaluated value.
+                     // UPDATE: actually it's getting numeric values and string values. Huh????
+                    case FORMULA:
+                        DataFormatter df = new DataFormatter();
+                        cell = new PdfPCell(new Phrase(df.formatCellValue(currentcell, evaluator)));
+                        table.addCell(cell);
+                        break;
+                }
+            }
+        }
+        pdf.add(table);
+        pdf.close();
+    }
+
     /***************************************************************
      * Here begin the tests. They shouldn't be here, but they are. *
      ***************************************************************/
@@ -301,7 +352,13 @@ public class XlReader {
         assert (Double) cells.get("B3") == 42.0;
     }
 
-    public static void main(String[] args) throws IOException {
+    public void write(String filename) throws IOException {
+        FileOutputStream file = new FileOutputStream(filename);
+        this.workbook.write(file);
+        file.close();
+    }
+
+    public static void main(String[] args) throws IOException, DocumentException {
 
         /* Check the command line arguments. */
         if (args.length != 1) {
@@ -314,8 +371,19 @@ public class XlReader {
 
         XlReader xlreader = new XlReader(filename);
 
-        xlreader.testGetAllFormulae();
-        xlreader.testPopulate();
-        xlreader.testEvaluateAll();
+        // Evaluate the data.
+        FormulaEvaluator evaluator = xlreader.evaluateAll(2);
+
+
+        // Write it to xlsx.
+        xlreader.write("testing.xlsx");
+        // Write it to pdf.
+
+        xlreader.toPdf("testing.pdf", evaluator);
+
+
+        //xlreader.testGetAllFormulae();
+        //xlreader.testPopulate();
+        //xlreader.testEvaluateAll();
     }
 }
