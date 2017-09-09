@@ -1,3 +1,40 @@
+$( document ).ready(function() {
+ 
+   $('select').material_select();
+
+   $('.button-collapse').sideNav({
+      menuWidth: 300, 
+      edge: 'left', 
+      closeOnClick: true, 
+      draggable: true,    
+   });
+
+   $("#chemical").change(function(event){
+        if($("#chemical")[0].selectedIndex > 0){
+            var chemindex = $("#chemical")[0].selectedIndex;
+            var drinking = $("#groundwaterutility")[0].selectedIndex;
+            var distance = $("#distancetowater")[0].selectedIndex;
+            var use = $("#landuse")[0].selectedIndex;
+            var xhttp = new XMLHttpRequest();
+            var data;
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    data = JSON.parse(this.responseText);
+                    $("#chemicalinfotitle").html(event.target.value);
+                    $("#refeals").html(data);
+                }
+            };
+            xhttp.open("GET", "/chemdata/"+(chemindex-1)+"/"+drinking+"/"+distance+"/"+use, true);
+            xhttp.send();
+       
+        }
+    });
+});
+
+
+  // Initialize collapsible (uncomment the line below if you use the dropdown variation)
+  //$('.collapsible').collapsible();
+/*
 var generate = document.getElementById("generate");
 var chemical = document.getElementById("chemical");
 var chemicalInputType = document.getElementById("chemicalInputType");
@@ -12,7 +49,7 @@ document.getElementById("chemicalinfotitle").innerHTML = chemical.value;
 //listen for incoming JSON string
 //turn back into JSON object
 //use for Final EAL Chemical references
-
+/*
 instructionstab.addEventListener("click", function(e){
     if(!instructionstab.classList.contains("tab-selected")){
         document.getElementsByClassName("tab-selected")[0].classList.toggle("tab-selected");
@@ -81,3 +118,4 @@ generate.addEventListener("click", function(event) {
     
 });
 
+*/
