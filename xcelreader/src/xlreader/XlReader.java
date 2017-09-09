@@ -269,6 +269,7 @@ public class XlReader {
         PdfPTable table = new PdfPTable(8);
         PdfPCell cell;
         Sheet[] sheets = {this.workbook.getSheetAt(4), this.workbook.getSheetAt(5)};
+        DataFormatter df = new DataFormatter();
 
         for (Sheet s : sheets) {
             Iterator iter = s.rowIterator();
@@ -276,29 +277,13 @@ public class XlReader {
             while (iter.hasNext()) {
                 Row row = (Row) iter.next();
                 Iterator<Cell> celliter = row.cellIterator();
+
                 while (celliter.hasNext()) {
                     Cell currentcell = celliter.next();
 
-                    switch (currentcell.getCellTypeEnum()) {
-                        case STRING:
-                            cell = new PdfPCell(new Phrase(currentcell.getStringCellValue()));
-                            table.addCell(cell);
-                            break;
-                        case NUMERIC:
-                            System.out.println(currentcell.getNumericCellValue());
-                            cell = new PdfPCell(new Phrase((float) currentcell.getNumericCellValue()));
-                            table.addCell(cell);
-                            break;
-
-                        // It looks like the problem here is that itext is getting a string value here
-                        // and not the evaluated value.
-                        // UPDATE: actually it's getting numeric values and string values. Huh????
-                        case FORMULA:
-                            DataFormatter df = new DataFormatter();
-                            cell = new PdfPCell(new Phrase(df.formatCellValue(currentcell, evaluator)));
-                            table.addCell(cell);
-                            break;
-                    }
+                    if (currentcell.getCellTypeEnum() == CellType.BLANK) { break; }
+                    cell = new PdfPCell(new Phrase(df.formatCellValue(currentcell, evaluator)));
+                    table.addCell(cell);
                 }
             }
             pdf.add(table);
