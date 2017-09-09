@@ -49,60 +49,26 @@ $( document ).ready(function() {
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
                 data = JSON.parse(this.responseText);
-                $(".chemicalchooser").append("<div class='row'><div class='input-field col s3'><select><option value='1'>Name</option><option value='2'>CAS #</option></select></div><div class='input-field col m6 s9'><select class='chemical'><option class='disabled'>Choose Chemical</option>"+data+"</select></div></div>");
+                $(".chemicalchooser").append("<div class='row'><div class='input-field col s3'><select><option value='1'>Name</option><option value='2'>CAS #</option></select></div><div class='input-field col m6 s9'><select class='chemical'><option class='disabled'>Choose Chemical</option>"+data+"</select></div><div class='input-field col m3 s12'><a class='btn-floating btn waves-effect waves-light tooltipped deletebtn' data-position='top' data-delay='50' data-tooltip='Remove this entry'><i class='material-icons'>clear</i></a></div></div>");
+                $(".sitedata").append("<div class ='row optionalsitedata'><div class='input-field col s4 soil'><label>Soil (mg/kg)</label><input type='number'></div><div class='input-field col s4 groundwater'><label>Groundwater (ug/L)</label><input type='number'></div><div class='input-field col s4 soilvapor'><label>Soil Vapor (ug/m3)</label><input type='number'></div></div>");
                 $('select').material_select();
+                $('.tooltipped').tooltip({delay: 50});
                 setChemListener();
+                $(".deletebtn").each(function(index){
+                    var option = $('.optionalsitedata');
+                    this.addEventListener("click", function(){
+                        $(".deletebtn").tooltip('hide');
+                        this.parentElement.parentElement.remove();
+                        option[index+1].remove();
+                    })
+                });
             }
         };
         xhttp.open("GET", "/chemlist", true);
         xhttp.send();
     });
-   
 });
-
-
-  // Initialize collapsible (uncomment the line below if you use the dropdown variation)
-  //$('.collapsible').collapsible();
 /*
-var generate = document.getElementById("generate");
-var chemical = document.getElementById("chemical");
-var chemicalInputType = document.getElementById("chemicalInputType");
-var chemicalInputChoice= document.getElementsByName("chemicalInputType");
-var instructionstab = document.getElementById("instructionstab");
-var ealformtab = document.getElementById("ealformtab");
-var ealform = document.getElementById("submitted").innerHTML;
-var instructions = "<div class='container ealsurfer'>Instructions from the first tab of the Excel sheet will go here</div>";
-
-document.getElementById("chemicalinfotitle").innerHTML = chemical.value;
-
-//listen for incoming JSON string
-//turn back into JSON object
-//use for Final EAL Chemical references
-/*
-instructionstab.addEventListener("click", function(e){
-    if(!instructionstab.classList.contains("tab-selected")){
-        document.getElementsByClassName("tab-selected")[0].classList.toggle("tab-selected");
-        instructionstab.classList.toggle("tab-selected");
-        document.getElementById("submitted").innerHTML = instructions;
-    }
-});
-
-ealformtab.addEventListener("click", function(e){
-    if(!ealformtab.classList.contains("tab-selected")){
-        document.getElementsByClassName("tab-selected")[0].classList.toggle("tab-selected");
-        ealformtab.classList.toggle("tab-selected");
-        document.getElementById("submitted").innerHTML = ealform;
-        generate = document.getElementById("generate");
-        chemical = document.getElementById("chemical");
-        chemicalInputType = document.getElementById("chemicalInputType");
-        chemicalInputChoice= document.getElementsByName("chemicalInputType");
-        document.getElementById("chemicalinfotitle").innerHTML = chemical.value;
-        chemical.addEventListener("change", function(e){
-            chemical =  document.getElementById("chemical");
-            document.getElementById("chemicalinfotitle").innerHTML = chemical.value;
-        });
-    }
-})
 
 generate.addEventListener("click", function(event) {
     var formdata = {
