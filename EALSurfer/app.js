@@ -60,6 +60,11 @@ app.get("/form", function(req, res){
     res.render("form", {chemList : chemicals});
 });
 
+app.get("/chemlist", function(req, res){
+    var chemicals = JSON.stringify(chemList);
+    res.send(chemList);
+});
+
 app.get("/instructions", function(req, res){
    res.render("instructions"); 
 });

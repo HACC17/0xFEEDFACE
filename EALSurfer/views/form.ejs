@@ -19,7 +19,7 @@
 				</div>
         <div class="section" id="warning"></div>
 				<div class="section">
-					<div class="infoblock" id="finaleals">
+					<div class="infoblock tooltipped" data-position="left"  data-delay="50" data-tooltip="Final EALs for last chemical added." id="finaleals">
             <h6 class="infotitle" style="font-size:1.5em" id="chemicalinfotitle"></h6>
             <h6 class="infotitle">Final EALs</h6>
             <hr>
@@ -103,30 +103,47 @@
           </div>
         </div>
       </div>
-      <div class="section"></div>
+      <div class="section chemicalchooser">
 				<div class="row">
 					<h5>Select Contaminant</h5>
           <div class="input-field col s3">
             <select id="chemicalInputType">
-              <option value="1">Chemical Name</option>
+              <option value="1">Name</option>
               <option value="2">CAS #</option>
             </select>
-            <label> Chemical Input Type </label>
+            <label>Input Type </label>
           </div>
-          <div class="input-field col s9">
-             <select id="chemical">
+          <div class="input-field col m6 s9">
+             <select class="chemical">
                <option class="disabled">Choose Chemical</option>
-              <%-JSON.parse(chemList)%>
+              <%var chemchoices = JSON.parse(chemList)%>
+              <%-chemchoices%>
              </select>
              <label>Contaminant</label>
           </div>
+          <div class="input-field col m3 s12">
+            <a class="waves-effect waves-light btn tooltipped" style="text-align:left" data-position="top" data-delay="50" data-tooltip="Add another chemical" id="addchemical"><i class="material-icons center">add</i></a>
+          </div>
 				</div>
+				<!-- New Chemicals are inserted here -->
 			</div>
-      <div class="row">
-        <div class="col s4">
-           <a class="waves-effect waves-light btn-large" style="text-align:center">Submit<i class="material-icons right">send</i></a>
+			<div class="section">
+			  <div class="row">
+					<h5>Enter Site Data (Optional)</h5>
+          <div class="input-field col s3">
+            <!--Soil (mg/kg):
+            Groundwater (ug/L):
+            Soil Vapor (ug/m3):-->
+          </div>
+        </div>
+			</div>
+			<div class="section">
+			  <div class="row">
+          <div class="col s4">
+             <a class="waves-effect waves-light btn-large" style="text-align:center">Submit<i class="material-icons right">send</i></a>
          </div>
       </div>
+			</div>
 		</div>
 	</div>
 <%include partials/footer%>
