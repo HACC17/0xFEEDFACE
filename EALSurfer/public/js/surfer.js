@@ -49,7 +49,7 @@ $( document ).ready(function() {
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
                 data = JSON.parse(this.responseText);
-                $(".chemicalchooser").append("<div class='row'><div class='input-field col s3'><select><option value='1'>Name</option><option value='2'>CAS #</option></select></div><div class='input-field col m6 s9'><select class='chemical'><option class='disabled'>Choose Chemical</option>"+data+"</select></div><div class='input-field col m3 s12'><a class='btn-floating btn waves-effect waves-light tooltipped deletebtn' data-position='top' data-delay='50' data-tooltip='Remove this entry'><i class='material-icons'>clear</i></a></div></div>");
+                $(".chemicalchooser").append("<div class='row'><div class='input-field col s3'><select class='chemicalInputType'><option value='1'>Name</option><option value='2'>CAS #</option></select></div><div class='input-field col m6 s9'><select class='chemical'><option class='disabled'>Choose Chemical</option>"+data+"</select></div><div class='input-field col m3 s12'><a class='btn-floating btn waves-effect waves-light tooltipped deletebtn' data-position='top' data-delay='50' data-tooltip='Remove this entry'><i class='material-icons'>clear</i></a></div></div>");
                 $(".sitedata").append("<div class ='row optionalsitedata'><div class='input-field col s4 soil'><label>Soil (mg/kg)</label><input type='number'></div><div class='input-field col s4 groundwater'><label>Groundwater (ug/L)</label><input type='number'></div><div class='input-field col s4 soilvapor'><label>Soil Vapor (ug/m3)</label><input type='number'></div></div>");
                 $('select').material_select();
                 $('.tooltipped').tooltip({delay: 50});
@@ -66,6 +66,64 @@ $( document ).ready(function() {
         };
         xhttp.open("GET", "/chemlist", true);
         xhttp.send();
+    });
+    
+    $("#submit").click(function(event){
+        /*Add Input Validation*/
+        
+        /*If validated continue*/
+        var reportOrder = [];
+        /*
+        This section of data is the same for every object.
+        */
+        var D5 = document.getElementById("landuse").value;
+        var D7 = document.getElementById("groundwaterutility").value;
+        var D10 = document.getElementById("distancetowater").value;
+        /*
+        
+        */
+        
+        /*
+        Build the reqest forms.
+        */
+       var userChemicals = $(".chemical>select");
+       var soilsamples = $(".soil>input");
+       var groundwatersamples = $(".groundwater>input");
+       var soilvaporsamples = $(".soilvapor>input");
+       var chemicalInputTypes = $(".chemicalInputType>select");
+       for(var i = 0; i < userChemicals.length; i++){
+           var formRequest = {
+               "sheet1" : {
+                   "D5" : D5,
+                   "D7" : D7,
+                   "D10" : D10,
+                   "D14": chemicalInputTypes[i].value,
+                   "C16": userChemicals[i].value,
+                   "D22": soilsamples[i].value,
+                   "D24": groundwatersamples[i].value,
+                   "D26": soilvaporsamples[i].value
+                            },
+               "sheet2" : {
+                   "D4" : $("#sitename")[0].value,
+                   "D5" : $("#siteaddress")[0].value,
+                   "D6" : $("#sitecity")[0].value,
+                   "E6" : $("#sitestate")[0].value,
+                   "F7" : $("#sitezip")[0].value,
+                   "D9" : $("#sitedate")[0].value
+               }
+           };//make form object
+           reportOrder.push(formRequest);
+       }
+       var xhttp = new XMLHttpRequest();
+       xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    
+                };
+            };
+        xhttp.open("GET", "/submit/"+JSON.stringify(reportOrder), true);
+        xhttp.send();
+       
+       
     });
 });
 /*
