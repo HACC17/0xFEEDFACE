@@ -1,6 +1,12 @@
 
-
 /* This CSS Desparetely needs refactoring! Do it soon?*/
+body {
+	padding-left: 300px;
+	background-image: url("/images/bg-image-5.jpg");
+	background-size: cover;
+	background-attachment: fixed;
+  
+}
 
 input {
   box-sizing: border-box;
@@ -10,56 +16,59 @@ label {
   font-size: 2em;
 }
 
-#displaytitle {
-  text-align:center;
-  
+canvas {
+  image-rendering: optimizeSpeed;             /* Older versions of FF          */
+  image-rendering: -moz-crisp-edges;          /* FF 6.0+                       */
+  image-rendering: -webkit-optimize-contrast; /* Safari                        */
+  image-rendering: -o-crisp-edges;            /* OS X & Windows Opera (12.02+) */
+  image-rendering: pixelated;                 /* Awesome future-browsers       */
+  -ms-interpolation-mode: nearest-neighbor;   /* IE                            */
 }
 
-.fixed {
-  width: 260px;
-  padding-top: 50px;
+.maindisplay {
+	width:90%;
+	padding:5%;
+	background-color: white;
+	margin: 20px;
 }
 
 .infoblock {
-  background-color: #E0EEEE;
-  border-radius: 2px;
+  background-color: #52658F;
+  color: white;
+  border-radius: 3px;
   box-shadow: 1px 1px 1px rgba(0,0,0, .7);
   padding: 5px;
   width: 100%;
-  margin: 10px 0;
-}
-
-.output {
-  text-align: right;
+  font-size: .8rem;
 }
 
 .infotitle {
   text-align: center;
 }
 
-.hidden {
-  height: 0px;
+.fixed {
+  background-color: #F7F5E6;
+  padding-top: 8%;
 }
 
-.admin {
-  text-align: center;
-  padding: auto;
+#displaytitle {
+  max-height:125px;
 }
 
-.footer {
-  background-color: rgba(255, 255, 255, .8);
-  padding: 20px;
-  max-width: 100%;
-  margin-top: 10px;
+#banner {
+  width: 100%;
+  height: 50%;
 }
 
-.material-icons{
-    display: inline-flex;
-    vertical-align: top;
+@media only screen and (max-width : 992px) {
+  	body {
+    	padding-left: 0;
+  	}
 }
 
-#warning {
-  height: 200px;
+@media only screen and (min-width : 992px) {
+	.button-collapse {
+		display: none;
+	}
 }
-
 

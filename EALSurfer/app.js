@@ -60,6 +60,11 @@ app.get("/form", function(req, res){
     res.render("form", {chemList : chemicals});
 });
 
+app.get("/chemlist", function(req, res){
+    var chemicals = JSON.stringify(chemList);
+    res.send(chemList);
+});
+
 app.get("/instructions", function(req, res){
    res.render("instructions"); 
 });
@@ -68,11 +73,10 @@ app.get("/admin", function(req, res){
    res.render("admin"); 
 });
 
-app.get("/report/:data", function(req, res){
+app.get("/submit/:data", function(req, res){
     var rawFormData = req.params.data;
     var formData = JSON.parse(rawFormData);
     console.log(formData);
-    res.send("<h1>Your form is available at:</h1>");
 });
 
 app.get("/eal_spreadsheet", function(req, res){
@@ -83,6 +87,10 @@ app.get("/download", function(req, res){
    var path = "public/uploads/master_spreadsheet_files/test.xlsx";
    res.download(path, "EALSurfer.xlsx"); 
 });
+
+app.get("/glossary", function(req, res){
+    res.render("glossary");
+})
 
 app.get("/chemdata/:index/:drinking/:distance/:use", function(req, res){
     var i = req.params.index;

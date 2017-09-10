@@ -1,48 +1,15 @@
 <% include partials/header %>
-<!-- Display Region -->
-
-	<div class="container displayarea">
-    <!-- Display Title Banner -->
+    <!-- Form -->
+  <div class="container maindisplay">
+    <!-- Section One--> 
     <div class="row">
-      <div class="col s12 m8 pull-m4 push-m2" id="displaytitle">
-        <h3>EAL Surfer Form</h3>
+      <div class="col m3 push-m9 infoblock">
+        <h6 class="infotitle">Reference</p></h6>
+        <p>
+          HDOH 2016, Evaluation of Environmental Hazards at Sites with Contaminated Soil and Groundwater (Summer 2016): Hawai'i Department of Health, Hazard Evaluation and Emergency Response, <a href="http://hawaii.gov/health/environmental/hazard/index.html">Hawaii DOH</a>     
+        </p>
       </div>
-    </div>
-		<div class="row">
-    <!-- Notes / HU Display -->
-			<div class="col s12 m4 push-m8 push-l10">
-				<div class="section infoblock">
-          			<h6 class="infotitle">Reference</p></h6>
-			          <p>
-			            HDOH 2016, Evaluation of Environmental Hazards at Sites with Contaminated Soil and Groundwater (Summer 2016): Hawai'i Department of Health, Hazard Evaluation and Emergency Response, <a href="http://hawaii.gov/health/environmental/hazard/index.html">Hawaii DOH</a>			
-			          </p>
-				</div>
-        <div class="section" id="warning"></div>
-				<div class="section">
-					<div class="infoblock" id="finaleals">
-            <h6 class="infotitle" style="font-size:1.5em" id="chemicalinfotitle"></h6>
-            <h6 class="infotitle">Final EALs</h6>
-            <hr>
-            <div class="row">
-              <div class="col m8">
-                <p>Soil (mg/kg)</p>
-                <p>Groundwater (ug/kg)</p>
-                <p>Soil Vapor (ug/kg)</p>
-              </div>
-              <div class="col m4" id="refeals">
-                
-              </div>
-            </div>
-          </div>
-				</div>
-				<div class="section infoblock" id="notes">
-            <h6 class="infotitle">Notes</p></h6>
-            <p>Chemical specifc notes will go here. The Excel Document responds to the users choice in the chemical dropdown list and changes the note.</p>
-				</div>
-			</div>
-      <!--Form Display Area -->
-		<div class="col s12 m8 pull-m4 pull-l2">
-      <div class="section">
+      <div class="col m9 pull-m3 section">
         <div class="row">
           <h5>Site Information</h5>
           <div class="input-field col s12 m8">
@@ -50,8 +17,8 @@
             <label for="sitename">Site Name</label>
           </div>
           <div class="input-field col s12 m4">
-                    <input type="date" id="sitedate"></input>
-                    <label for="sitedate" class="active" >Date of Search:</label>
+            <input type="date" id="sitedate"></input>
+            <label for="sitedate" class="active" >Date of Search:</label>
           </div>
           <div class="input-field col s12">
             <input type="text" placeholder="Site Address" id="siteaddress"></input>
@@ -59,74 +26,191 @@
           </div>
             <div class="col s12">
               <div class="row">
-              <div class="input-field col s6">
-                <input type="text" placeholder="City" id="sitecity"></input>
-                <label for="sitecity">City</label>
-              </div>
-              <div class="input-field col s2">
-                <input type="text" placeholder="State" id="sitestate"></input>
-                <label for="sitecity">State</label>
-              </div>
+                <div class="input-field col s6">
+                  <input type="text" placeholder="City" id="sitecity"></input>
+                  <label for="sitecity">City</label>
+                </div>
+                  <div class="input-field col s2">
+                    <select id="sitestate">
+                    <option value="AL">Alabama</option>
+                    <option value="AK">Alaska</option>
+                    <option value="AZ">Arizona</option>
+                    <option value="AR">Arkansas</option>
+                    <option value="CA">California</option>
+                    <option value="CO">Colorado</option>
+                    <option value="CT">Connecticut</option>
+                    <option value="DE">Delaware</option>
+                    <option value="DC">District Of Columbia</option>
+                    <option value="FL">Florida</option>
+                    <option value="GA">Georgia</option>
+                    <option value="HI" selected="selected">Hawaii</option>
+                    <option value="ID">Idaho</option>
+                    <option value="IL">Illinois</option>
+                    <option value="IN">Indiana</option>
+                    <option value="IA">Iowa</option>
+                    <option value="KS">Kansas</option>
+                    <option value="KY">Kentucky</option>
+                    <option value="LA">Louisiana</option>
+                    <option value="ME">Maine</option>
+                    <option value="MD">Maryland</option>
+                    <option value="MA">Massachusetts</option>
+                    <option value="MI">Michigan</option>
+                    <option value="MN">Minnesota</option>
+                    <option value="MS">Mississippi</option>
+                    <option value="MO">Missouri</option>
+                    <option value="MT">Montana</option>
+                    <option value="NE">Nebraska</option>
+                    <option value="NV">Nevada</option>
+                    <option value="NH">New Hampshire</option>
+                    <option value="NJ">New Jersey</option>
+                    <option value="NM">New Mexico</option>
+                    <option value="NY">New York</option>
+                    <option value="NC">North Carolina</option>
+                    <option value="ND">North Dakota</option>
+                    <option value="OH">Ohio</option>
+                    <option value="OK">Oklahoma</option>
+                    <option value="OR">Oregon</option>
+                    <option value="PA">Pennsylvania</option>
+                    <option value="RI">Rhode Island</option>
+                    <option value="SC">South Carolina</option>
+                    <option value="SD">South Dakota</option>
+                    <option value="TN">Tennessee</option>
+                    <option value="TX">Texas</option>
+                    <option value="UT">Utah</option>
+                    <option value="VT">Vermont</option>
+                    <option value="VA">Virginia</option>
+                    <option value="WA">Washington</option>
+                    <option value="WV">West Virginia</option>
+                    <option value="WI">Wisconsin</option>
+                    <option value="WY">Wyoming</option>
+                  </select>
+                  <label>State</label>
+                </div>
               <div class="input-field col s4">
-                <input type="text" placeholder="Zip" id="sitezip"></input>
+                <input type="text" pattern="^\d{5}(?:[-\s]\d{4})?$" placeholder="Zip" class="validate" id="sitezip"></input>
                 <label for="sitecity">Zipcode</label>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col m9 section">
+        <div class="row">
+          <h5>Site Scenario</h5>
+          <div class="input-field col m6">
+            <select id="landuse">
+              <option value="1">Unrestricted</option>
+              <option value="2">Commercial/Industrial Use Onlys</option>
+            </select>
+            <label>Land Use</label>
+          </div>
+          <div class="input-field col m6">
+            <select id="groundwaterutility">
+              <option value="1">Drinking Water Resrouce</option>
+              <option value="2">Nondrinking Water Resorce</option>
+            </select>
+            <label>Groundwater Utility</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col m12">
+          <select id="distancetowater">
+            <option value="1">&gt150m</option>
+            <option value="2"> &le;150m</option>
+          </select>
+          <label>Distance To Nearest Surface Water Body</label>
+          </div>
+        </div>
+      </div>
+      <div class="col m3">
+        <div class="warning"></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col m3 push-m9 s12">
+        <div class="row">
+          <div class="infoblock tooltipped" data-position="left"  data-delay="50" data-tooltip="Final EALs for last chemical added." id="finaleals">
+            <h6 class="infotitle" style="font-size:1.5em" id="chemicalinfotitle"></h6>
+            <h6 class="infotitle">Final EALs</h6>
+            <hr>
+            <div class="row">
+              <div class="col m8">
+              <p>Soil (mg/kg)</p>
+              <p>Groundwater (ug/kg)</p>
+              <p>Soil Vapor (ug/kg)</p>
+              </div>
+              <div class="col m4" id="refeals">
+                <!-- Specific EAL numbers inserted here -->
               </div>
             </div>
+          </div>
         </div>
       </div>
-			<div class="section">
-				<div class="row">
-          <h5>Site Scenario</h5>
-            <div class="input-field col s6">
-              <select id="landuse">
-                <option value="1">Unrestricted</option>
-                <option value="2">Commercial/Industrial Use Onlys</option>
-              </select>
-              <label>Land Use</label>
-            </div>
-            <div class="input-field col s6">
-              <select id="groundwaterutility">
-                <option value="1">Drinking Water Resrouce</option>
-                <option value="2">Nondrinking Water Resorce</option>
-              </select>
-              <label>Groundwater Utility</label>
-            </div>
-          </div>
+      <div class="col m9 pull-m3">
+        <div class="section chemicalchooser">
           <div class="row">
-            <div class="input-field col s6">
-            <select id="distancetowater">
-              <option value="1">&gt150m</option>
-              <option value="2"> &le;150m</option>
-            </select>
-            <label>Distance To Nearest Surface Water Body</label>
-          </div>
-        </div>
-      </div>
-      <div class="section"></div>
-				<div class="row">
-					<h5>Select Contaminant</h5>
-          <div class="input-field col s3">
-            <select id="chemicalInputType">
-              <option value="1">Chemical Name</option>
+            <h5>Select Contaminant</h5>
+            <div class="input-field col s3">
+            <select class="chemicalInputType">
+              <option value="1">Name</option>
               <option value="2">CAS #</option>
             </select>
-            <label> Chemical Input Type </label>
+            <label>Input Type </label>
+            </div>
+            <div class="input-field col m6 s9">
+               <select class="chemical">
+                 <option class="disabled">Choose Chemical</option>
+                <%var chemchoices = JSON.parse(chemList)%>
+                <%-chemchoices%>
+               </select>
+               <label>Contaminant</label>
+            </div>
+            <div class="input-field col m3">
+              <a class="waves-effect waves-light btn tooltipped" style="text-align:left" data-position="top" data-delay="50" data-tooltip="Add another chemical" id="addchemical"><i class="material-icons center">add</i></a>
+            </div>
           </div>
-          <div class="input-field col s9">
-             <select id="chemical">
-               <option class="disabled">Choose Chemical</option>
-              <%-JSON.parse(chemList)%>
-             </select>
-             <label>Contaminant</label>
-          </div>
-				</div>
-			</div>
-      <div class="row">
-        <div class="col s4">
-           <a class="waves-effect waves-light btn-large" style="text-align:center">Submit<i class="material-icons right">send</i></a>
-         </div>
+        </div>
+        <!-- New Chemicals are inserted here -->
       </div>
-		</div>
-	</div>
+    </div>
+    <div class="row">
+      <div class="col m9">
+        <div class="section sitedata">
+          <div class="row">
+            <h5>Enter Site Data (Optional)</h5>
+          </div>
+          <div class ="row optionalsitedata">
+            <div class="input-field col s4 soil">
+              <label>Soil (mg/kg)</label>
+              <input type="number">
+            </div>
+            <div class="input-field col s4 groundwater">
+              <label>Groundwater (ug/L)</label>
+              <input type="number">
+            </div>
+            <div class="input-field col s4 soilvapor">
+              <label>Soil Vapor (ug/m3)</label>
+              <input type="number">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col m3">
+        
+      </div>
+    </div>
+    <div class="row">
+      <div class="col m9">
+        <div class="section">
+        <div class="row  finish">
+          <div class="col s4">
+             <a class="waves-effect waves-light btn-large" style="text-align:center" id="submit">Submit<i class="material-icons right">send</i></a>
+         </div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
 <%include partials/footer%>
