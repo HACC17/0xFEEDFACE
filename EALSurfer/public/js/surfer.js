@@ -155,4 +155,62 @@ $( document ).ready(function() {
             alert("Fields marked in red are invalid.")
         }
     });
+    
+    function drawLogo(ctx, xoff, yoff) {
+	  ctx.beginPath();
+	  ctx.moveTo(0, .5*yoff);
+	  ctx.bezierCurveTo(.2*xoff, -(.3*yoff), .3*xoff, yoff, .375*xoff, .4*yoff);
+	  ctx.bezierCurveTo(.3*xoff, yoff, .2*xoff, .5*yoff, 0, .5*yoff);
+	  var grd=ctx.createLinearGradient(0,0,170,0);
+	    grd.addColorStop(0,"#85d8ce");
+	    grd.addColorStop(1,"#085078");
+	  ctx.fillStyle = grd;
+	  ctx.fill();
+	  ctx.beginPath();
+	  ctx.moveTo(.28*xoff, .4*yoff);
+	  ctx.bezierCurveTo(.31*xoff, .65*yoff, .34*xoff, .25*yoff, .33*xoff, 0*yoff);
+	  ctx.bezierCurveTo(.41*xoff, .08*yoff, .36*xoff, .8*yoff, .28*xoff, .4*yoff);
+	  ctx.fillStyle = '#85d8ce';
+	  ctx.fill();
+	  /*ctx.beginPath();
+	  ctx.moveTo(.347*xoff, .1*yoff);
+	  ctx.lineTo(.352*xoff, .1*yoff);
+	  ctx.lineTo(.352*xoff, .2*yoff);
+	  ctx.lineTo(.362*xoff, .2*yoff);
+	  ctx.lineTo(.362*xoff, .25*yoff);
+	  ctx.lineTo(.352*xoff, .25*yoff);
+	  ctx.lineTo(.352*xoff, .35*yoff);
+	  ctx.lineTo(.347*xoff, .35*yoff);
+	  ctx.lineTo(.347*xoff, .25*yoff);
+	  ctx.lineTo(.337*xoff, .25*yoff);
+	  ctx.lineTo(.337*xoff, .2*yoff);
+	  ctx.lineTo(.347*xoff, .2*yoff);
+	  ctx.lineTo(.347*xoff, .1*yoff);
+	  ctx.fillStyle = 'white';
+	  ctx.strokeStyle = 'black';
+	  ctx.fill();
+	  ctx.stroke();*/
+	  ctx.beginPath();
+	  ctx.moveTo(0, .5*yoff);
+	  ctx.bezierCurveTo(.1*xoff, 1*yoff, .2*xoff, -.1*yoff, .25*xoff, 0);
+	  ctx.moveTo(.33*xoff, 0);
+	  ctx.bezierCurveTo(.2*xoff, -.1*yoff, .1*xoff, 1*yoff, 0, .5*yoff);
+	  ctx.moveTo(0, .5*yoff);
+	  ctx.bezierCurveTo(.1*xoff, 1*yoff, .175*xoff, 0, .20*xoff, 0);
+	  ctx.strokeStyle = '#85d8ce';
+	  ctx.stroke();
+	  ctx.globalAlpha = 1;
+	  ctx.fillStyle = 'white';
+	  ctx.font = "Bold Italic " + .8*yoff + 'px Roboto';
+	  ctx.fillText('EAL', .01*xoff, .6*yoff, .7*yoff);
+	  ctx.font = "Italic " + .7*yoff + 'px Ariel';
+	  ctx.fillText('Surfer', .15*xoff, .57*yoff, yoff);
+	}
+	    
+	var banner = $("#banner")[0];
+	var ctx = banner.getContext("2d");
+	ctx.scale(.9,.9);
+	var offsetHeight = $("#displaytitle")[0].offsetHeight;
+	var offsetWidth = $("#displaytitle")[0].offsetWidth;
+	drawLogo(ctx, offsetWidth, offsetHeight);
 });
