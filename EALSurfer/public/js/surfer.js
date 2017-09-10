@@ -159,7 +159,7 @@ $( document ).ready(function() {
     function drawLogo(ctx, xoff, yoff) {
 	  ctx.beginPath();
 	  ctx.moveTo(0, .5*yoff);
-	  ctx.bezierCurveTo(.2*xoff, -(.3*yoff), .3*xoff, yoff, .375*xoff, .4*yoff);
+	  ctx.bezierCurveTo(.1*xoff, -(.3*yoff), .3*xoff, yoff, .375*xoff, .4*yoff);
 	  ctx.bezierCurveTo(.3*xoff, yoff, .2*xoff, .5*yoff, 0, .5*yoff);
 	  var grd=ctx.createLinearGradient(0,0,170,0);
 	    grd.addColorStop(0,"#85d8ce");

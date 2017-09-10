@@ -64,13 +64,6 @@ canvas {
   	body {
     	padding-left: 0;
   	}
-  	#displaytitle {
-  		height: 75px;
-  	}
-  	#banner {
-  		width: 100%;
-  		height:100%;
-  	}
 }
 
 @media only screen and (min-width : 992px) {
