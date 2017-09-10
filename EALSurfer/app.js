@@ -88,6 +88,10 @@ app.get("/download", function(req, res){
    res.download(path, "EALSurfer.xlsx"); 
 });
 
+app.get("/glossary", function(req, res){
+    res.render("glossary");
+})
+
 app.get("/chemdata/:index/:drinking/:distance/:use", function(req, res){
     var i = req.params.index;
     var drinking = req.params.drinking;

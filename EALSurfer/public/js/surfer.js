@@ -1,56 +1,17 @@
 $( document ).ready(function() {
-
-function drawLogo(ctx, xoff, yoff) {
-  ctx.beginPath();
-  ctx.moveTo(0, yoff);
-  ctx.bezierCurveTo(.2*xoff, -(.3*yoff), .3*xoff, 1.4*yoff, .375*xoff, .4*yoff);
-  ctx.bezierCurveTo(.3*xoff, 1.8*yoff, .2*xoff, .5*yoff, 0, yoff);
-  ctx.fillStyle = '#8ED6FF';
-  ctx.fill();
-  ctx.beginPath();
-  ctx.moveTo(.1*xoff, .9*yoff);
-  ctx.bezierCurveTo(.2*xoff, -(.3*yoff), .3*xoff, 1.4*yoff, .375*xoff, .5*yoff);
-  ctx.bezierCurveTo(.3*xoff, 1.8*yoff, .2*xoff, .5*yoff, .1*xoff, .9*yoff);
-  ctx.fillStyle = '#ffffff';
-  ctx.globalAlpha = .8;
-  ctx.fill();
-  ctx.beginPath();
-  ctx.moveTo(.28*xoff, .6*yoff);
-  ctx.bezierCurveTo(.31*xoff, .65*yoff, .34*xoff, .25*yoff, .33*xoff, 0*yoff);
-  ctx.bezierCurveTo(.41*xoff, .08*yoff, .36*xoff, .8*yoff, .28*xoff, .6*yoff);
-  ctx.fillStyle = '#8ED6FF';
-  ctx.fill();
-  ctx.beginPath();
-  ctx.moveTo(.347*xoff, .1*yoff);
-  ctx.lineTo(.352*xoff, .1*yoff);
-  ctx.lineTo(.352*xoff, .2*yoff);
-  ctx.lineTo(.362*xoff, .2*yoff);
-  ctx.lineTo(.362*xoff, .25*yoff);
-  ctx.lineTo(.352*xoff, .25*yoff);
-  ctx.lineTo(.352*xoff, .35*yoff);
-  ctx.lineTo(.347*xoff, .35*yoff);
-  ctx.lineTo(.347*xoff, .25*yoff);
-  ctx.lineTo(.337*xoff, .25*yoff);
-  ctx.lineTo(.337*xoff, .2*yoff);
-  ctx.lineTo(.347*xoff, .2*yoff);
-  ctx.lineTo(.347*xoff, .1*yoff);
-  ctx.fillStyle = 'white';
-  ctx.strokeStyle = '#8ED6FF';
-  ctx.fill();
-  ctx.stroke();
-  ctx.globalAlpha = .8;
-  ctx.fillStyle = '#6188c6';
-  ctx.font = /*"Black Italic" + */1.2*yoff + 'px Roboto';
-  ctx.fillText('EAL', 0, yoff, .7*yoff);
-  ctx.font = "Italic " + 1.1*yoff + 'px Ariel';
-  ctx.fillText('Surfer', .75*yoff, yoff, yoff);
-}
-    
-var banner = $("#displaytitle")[0];
-var ctx = banner.getContext("2d");
-var offsetHeight = $("#banner")[0].offsetHeight;
-var offsetWidth = $("#banner")[0].offsetWidth;
-drawLogo(ctx, offsetWidth, offsetHeight);
+    /*
+    Initialize Materialize inputs
+    */
+   $('select').material_select();
+    /*
+    Initialize collapsable sidenav
+    */
+   $('.button-collapse').sideNav({
+      menuWidth: 300, 
+      edge: 'left', 
+      closeOnClick: true, 
+      draggable: true,    
+   });
 
     /*
     Code to grab Final EAL values when client chooses a chemical. Saved as a
@@ -78,20 +39,7 @@ drawLogo(ctx, offsetWidth, offsetHeight);
         });
     }
     
-    /*
-    Initialize Materialize inputs
-    */
-   $('select').material_select();
-    /*
-    Initialize collapsable sidenav
-    */
-   $('.button-collapse').sideNav({
-      menuWidth: 300, 
-      edge: 'left', 
-      closeOnClick: true, 
-      draggable: true,    
-   });
-   
+  
     setChemListener();
     /*
     Add chemical button, adds another chemical input line to the EAL Form
@@ -204,38 +152,7 @@ drawLogo(ctx, offsetWidth, offsetHeight);
             xhttp.send();
         }
         else{
-            $(".finish").append("<div class='col s6 invalidfieldwarning'><p style='text-align:center; color:red'>Some fields are invalids. Please update all fields marked in red.</p> </div>");
+            alert("Fields marked in red are invalid.")
         }
     });
 });
-/*
-
-generate.addEventListener("click", function(event) {
-    var formdata = {
-        "sheet1": {
-            "D5":document.getElementById("landUse").value,
-            "D7":document.getElementById("groundWaterUtility").value,
-            "D10":document.getElementById("distanceToWater").value,
-            "D14":document.getElementById("chemicalInputType").value,
-            "C16":document.getElementById("chemical").value,
-            "D22":document.getElementById("soil").value,
-            "D24":document.getElementById("groundWater").value,
-            "D26":document.getElementById("soilVapor").value
-        }
-    }
-    var rawdata = JSON.stringify(formdata);
-    var path = "/report/" + rawdata;
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            document.getElementById("submitted").classList.toggle("display");
-            document.getElementById("submitted").innerHTML = xmlHttp.response;
-            console.log(xmlHttp.response);
-       }
-    };
-    xmlHttp.open("GET", path, true); // true for asynchronous 
-    xmlHttp.send();
-    
-});
-
-*/
