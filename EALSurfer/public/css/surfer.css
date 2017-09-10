@@ -10,11 +10,6 @@ label {
   font-size: 2em;
 }
 
-#displaytitle {
-  text-align:center;
-  
-}
-
 .fixed {
   width: 260px;
   padding-top: 50px;
@@ -60,6 +55,22 @@ label {
 
 #warning {
   height: 200px;
+}
+
+#displaytitle {
+	height: 100%;
+	width: 100%;
+}
+
+#banner {
+	width: 100vh;
+	height: 20vh;
+	padding: none;
+	margin: 5px;
+}
+
+#displaypagetitle {
+  text-align:center;
 }
 
 
