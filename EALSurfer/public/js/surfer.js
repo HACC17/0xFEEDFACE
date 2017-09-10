@@ -201,10 +201,10 @@ $( document ).ready(function() {
 	  ctx.stroke();
 	  ctx.globalAlpha = 1;
 	  ctx.fillStyle = 'white';
-	  ctx.font = "Bold Italic " + .8*yoff + 'px Roboto';
-	  ctx.fillText('EAL', .01*xoff, .6*yoff, .7*yoff);
-	  ctx.font = "Italic " + .7*yoff + 'px Ariel';
-	  ctx.fillText('Surfer', .15*xoff, .57*yoff, yoff);
+	  ctx.font = "Bold Italic " + .6*yoff + 'px Roboto';
+	  ctx.fillText('EAL', .01*xoff, .5*yoff, .7*yoff);
+	  ctx.font = "Italic " + .6*yoff + 'px Ariel';
+	  ctx.fillText('Surfer', .15*xoff, .48*yoff, yoff);
 	}
 	    
 	var banner = $("#banner")[0];
