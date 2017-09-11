@@ -100,7 +100,7 @@ $( document ).ready(function() {
              data.classList.add("invalid");
              formready=false;
            }
-           else { console.log(data);
+           else {
            data.classList.remove("invalid");
            }
        })
@@ -128,12 +128,12 @@ $( document ).ready(function() {
                    "D26": soilvaporsamples[i].value
                             },
                "sheet2" : {
-                   "D4" : siteinfo[0],
-                   "D5" : siteinfo[1],
-                   "D6" : siteinfo[2],
-                   "E6" : siteinfo[3],
-                   "F7" : siteinfo[4],
-                   "D9" : siteinfo[5]
+                   "D4" : siteinfo[0].value,
+                   "D5" : siteinfo[1].value,
+                   "D6" : siteinfo[2].value,
+                   "E6" : siteinfo[3].value,
+                   "F7" : siteinfo[4].value,
+                   "D9" : siteinfo[5].value
                }
            };//make form object
            reportOrder.push(formRequest);
@@ -142,6 +142,7 @@ $( document ).ready(function() {
        $('.tooltipped').tooltip({delay: 50});
        Materialize.updateTextFields();
        if(formready){
+           document.getElementById("invalidform").innerHTML = "";
            var xhttp = new XMLHttpRequest();
            xhttp.onreadystatechange = function() {
                     if (this.readyState == 4 && this.status == 200) {
@@ -152,65 +153,40 @@ $( document ).ready(function() {
             xhttp.send();
         }
         else{
-            alert("Fields marked in red are invalid.")
+            document.getElementById("invalidform").innerHTML = "<p style='color: red'>Oops! Please correct all fields marked in red.</p>";
         }
     });
-    
-    function drawLogo(ctx, xoff, yoff) {
-	  ctx.beginPath();
-	  ctx.moveTo(0, .5*yoff);
-	  ctx.bezierCurveTo(.1*xoff, -(.3*yoff), .3*xoff, yoff, .375*xoff, .4*yoff);
-	  ctx.bezierCurveTo(.3*xoff, yoff, .2*xoff, .5*yoff, 0, .5*yoff);
-	  var grd=ctx.createLinearGradient(0,0,170,0);
-	    grd.addColorStop(0,"#85d8ce");
-	    grd.addColorStop(1,"#085078");
-	  ctx.fillStyle = grd;
-	  ctx.fill();
-	  ctx.beginPath();
-	  ctx.moveTo(.28*xoff, .4*yoff);
-	  ctx.bezierCurveTo(.31*xoff, .65*yoff, .34*xoff, .25*yoff, .33*xoff, 0*yoff);
-	  ctx.bezierCurveTo(.41*xoff, .08*yoff, .36*xoff, .8*yoff, .28*xoff, .4*yoff);
-	  ctx.fillStyle = '#85d8ce';
-	  ctx.fill();
-	  /*ctx.beginPath();
-	  ctx.moveTo(.347*xoff, .1*yoff);
-	  ctx.lineTo(.352*xoff, .1*yoff);
-	  ctx.lineTo(.352*xoff, .2*yoff);
-	  ctx.lineTo(.362*xoff, .2*yoff);
-	  ctx.lineTo(.362*xoff, .25*yoff);
-	  ctx.lineTo(.352*xoff, .25*yoff);
-	  ctx.lineTo(.352*xoff, .35*yoff);
-	  ctx.lineTo(.347*xoff, .35*yoff);
-	  ctx.lineTo(.347*xoff, .25*yoff);
-	  ctx.lineTo(.337*xoff, .25*yoff);
-	  ctx.lineTo(.337*xoff, .2*yoff);
-	  ctx.lineTo(.347*xoff, .2*yoff);
-	  ctx.lineTo(.347*xoff, .1*yoff);
-	  ctx.fillStyle = 'white';
-	  ctx.strokeStyle = 'black';
-	  ctx.fill();
-	  ctx.stroke();*/
-	  ctx.beginPath();
-	  ctx.moveTo(0, .5*yoff);
-	  ctx.bezierCurveTo(.1*xoff, 1*yoff, .2*xoff, -.1*yoff, .25*xoff, 0);
-	  ctx.moveTo(.33*xoff, 0);
-	  ctx.bezierCurveTo(.2*xoff, -.1*yoff, .1*xoff, 1*yoff, 0, .5*yoff);
-	  ctx.moveTo(0, .5*yoff);
-	  ctx.bezierCurveTo(.1*xoff, 1*yoff, .175*xoff, 0, .20*xoff, 0);
-	  ctx.strokeStyle = '#85d8ce';
-	  ctx.stroke();
-	  ctx.globalAlpha = 1;
-	  ctx.fillStyle = 'white';
-	  ctx.font = "Bold Italic " + .6*yoff + 'px Roboto';
-	  ctx.fillText('EAL', .01*xoff, .5*yoff, .7*yoff);
-	  ctx.font = "Italic " + .6*yoff + 'px Ariel';
-	  ctx.fillText('Surfer', .15*xoff, .48*yoff, yoff);
-	}
 	    
-	var banner = $("#banner")[0];
-	var ctx = banner.getContext("2d");
+	var canvas = document.getElementById("banner");
+	var ctx = canvas.getContext("2d");
 	ctx.scale(.9,.9);
-	var offsetHeight = $("#displaytitle")[0].offsetHeight;
-	var offsetWidth = $("#displaytitle")[0].offsetWidth;
-	drawLogo(ctx, offsetWidth, offsetHeight);
+	canvas.width = window.innerWidth;
+	canvas.height = window.innerWidth/2.2;
+	ctx.globalAlpha = 0.7;
+      ctx.beginPath();
+      ctx.moveTo(0, .4*canvas.height);
+      ctx.bezierCurveTo(.4*canvas.width, -(.4*canvas.height), .6*canvas.width, .7*canvas.height, .89*canvas.width, .2*canvas.height);
+      ctx.bezierCurveTo(.6*canvas.width, .8*canvas.height, .4*canvas.width, 0, 0, .4*canvas.height);
+      var grd=ctx.createLinearGradient(0,0,400,0);
+        grd.addColorStop(.4,"#85d8ce");
+        grd.addColorStop(1,"#085078");
+      ctx.fillStyle = grd;
+      ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(.7*canvas.width, .3*canvas.height);
+      ctx.bezierCurveTo(.94*canvas.width, .35*canvas.height, .9*canvas.width, -.1*canvas.height, .7*canvas.width, .1*canvas.height);
+      ctx.bezierCurveTo(.8*canvas.width, .08*canvas.height, .8*canvas.width, .25*canvas.height, .7*canvas.width, .3*canvas.height);
+      ctx.fillStyle = '#85d8ce';
+      ctx.fill();
+      /*ctx.globalAlpha = 1;
+      ctx.fillStyle = '#085078';
+      ctx.strokeStyle = "black";
+      ctx.lineWidth = 3;
+      ctx.font = "Bold Italic " + .3*canvas.height + 'px Ariel';
+      ctx.strokeText('EAL', .1*canvas.width, .4*canvas.height, .3*canvas.width);
+      ctx.fillText('EAL', .1*canvas.width, .4*canvas.height, .3*canvas.width);
+      ctx.fillStyle = '#85d8ce';
+      ctx.font = "Italic " + .3*canvas.height + 'px Ariel';
+      ctx.fillText('Surfer', .42*canvas.width, .4*canvas.height, .4*canvas.width);
+      ctx.strokeText('Surfer', .42*canvas.width, .4*canvas.height, .4*canvas.width);*/
 });

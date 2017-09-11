@@ -1,0 +1,21 @@
+body {
+        margin: 0;
+        background-color: #F7F5E6;
+      }
+      #canvas {
+        background-color: #F7F5E6;
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+      }
+      #bannertitle {
+          color: white;
+          width: 100%;
+          height: 100%;
+          position: absolute;
+          vertical-align: bottom;
+          top: 0;
+          left: 0;
+          font-weight: bold;
+          font-style: italic;
+        }

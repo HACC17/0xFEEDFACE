@@ -52,7 +52,7 @@ chemRefProcessor("public/uploads/master_spreadsheet_files/test.xlsx");
 
 
 app.get("/", function(req, res){
-    res.send("<h1>HACC2017 0xFEEDFACE landing page.</h1><p>Expect great things.</p>");
+    res.render("landingpage");
 });
 
 app.get("/form", function(req, res){
