@@ -26,11 +26,11 @@
           </div>
             <div class="col s12">
               <div class="row">
-                <div class="input-field col s6">
+                <div class="input-field col m6 s12">
                   <input type="text" placeholder="City" id="sitecity"></input>
                   <label for="sitecity">City</label>
                 </div>
-                  <div class="input-field col s2">
+                  <div class="input-field col m2 s12">
                     <select id="sitestate">
                     <option value="AL">Alabama</option>
                     <option value="AK">Alaska</option>
@@ -86,7 +86,7 @@
                   </select>
                   <label>State</label>
                 </div>
-              <div class="input-field col s4">
+              <div class="input-field col m4 s12">
                 <input type="text" pattern="^\d{5}(?:[-\s]\d{4})?$" placeholder="Zip" class="validate" id="sitezip"></input>
                 <label for="sitecity">Zipcode</label>
               </div>
@@ -99,14 +99,14 @@
       <div class="col m9 section">
         <div class="row">
           <h5>Site Scenario</h5>
-          <div class="input-field col m6">
+          <div class="input-field col m6 s12">
             <select id="landuse">
               <option value="1">Unrestricted</option>
               <option value="2">Commercial/Industrial Use Onlys</option>
             </select>
             <label>Land Use</label>
           </div>
-          <div class="input-field col m6">
+          <div class="input-field col m6 s12">
             <select id="groundwaterutility">
               <option value="1">Drinking Water Resrouce</option>
               <option value="2">Nondrinking Water Resorce</option>
@@ -115,7 +115,7 @@
           </div>
         </div>
         <div class="row">
-          <div class="input-field col m12">
+          <div class="input-field col m12 s12">
           <select id="distancetowater">
             <option value="1">&gt150m</option>
             <option value="2"> &le;150m</option>
@@ -136,12 +136,12 @@
             <h6 class="infotitle">Final EALs</h6>
             <hr>
             <div class="row">
-              <div class="col m8">
+              <div class="col m8 s8">
               <p>Soil (mg/kg)</p>
               <p>Groundwater (ug/kg)</p>
               <p>Soil Vapor (ug/kg)</p>
               </div>
-              <div class="col m4" id="refeals">
+              <div class="col m4 s4" id="refeals">
                 <!-- Specific EAL numbers inserted here -->
               </div>
             </div>
@@ -182,15 +182,15 @@
             <h5>Enter Site Data (Optional)</h5>
           </div>
           <div class ="row optionalsitedata">
-            <div class="input-field col s4 soil">
+            <div class="input-field col m4 s12 soil">
               <label>Soil (mg/kg)</label>
               <input type="number">
             </div>
-            <div class="input-field col s4 groundwater">
+            <div class="input-field col m4 s12 groundwater">
               <label>Groundwater (ug/L)</label>
               <input type="number">
             </div>
-            <div class="input-field col s4 soilvapor">
+            <div class="input-field col m4 s12 soilvapor">
               <label>Soil Vapor (ug/m3)</label>
               <input type="number">
             </div>
@@ -202,11 +202,14 @@
       </div>
     </div>
     <div class="row">
-      <div class="col m9">
+      <div class="col m9 s12">
         <div class="section">
-        <div class="row  finish">
-          <div class="col s4">
+        <div class="row finish">
+          <div class="col m4 s12">
              <a class="waves-effect waves-light btn-large" style="text-align:center" id="submit">Submit<i class="material-icons right">send</i></a>
+         </div>
+         <div class="col m8 s12">
+             <span id="invalidform"></span>
          </div>
         </div>
       </div>
