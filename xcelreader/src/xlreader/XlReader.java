@@ -27,7 +27,6 @@ public class XlReader {
     private final Workbook workbook;
     private final ArrayList<Sheet> sheets;
     private final int nsheets;
-    private boolean evaluated;
 
     public XlReader(final String filename) throws IOException {
         this.filename = filename;
@@ -140,7 +139,7 @@ public class XlReader {
      * @param   sheetnumber     the number of the sheet to get
      * @return  evaluator       a FormulaEvaluator that is used when writing PDFs
      */
-    public FormulaEvaluator evaluateAll(final int sheetnumber) {
+    public FormulaEvaluator evaluateAll(final int sheetnumber) throws FileNotFoundException, DocumentException {
         //if (this.evaluated = true) { return; }
         if (sheetnumber > this.nsheets) {
             System.exit(1);
@@ -148,7 +147,15 @@ public class XlReader {
 
         FormulaEvaluator evaluator = this.workbook.getCreationHelper().createFormulaEvaluator();
         evaluator.evaluateAll();
-        this.evaluated = true;
+        try {
+            this.toPdf("evalall.pdf", 4, 5, evaluator);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+
+        }
         return evaluator;
     }
 
@@ -256,41 +263,84 @@ public class XlReader {
         return success;
     }
 
+    /**
+     * Write the entire excel file to a new excel file.
+     *
+     * This is intended to be run after the original excel file has been
+     * evaluated using evaluateAll.
+     *
+     * @param   filename        the name of the new file
+     * @throws  IOException     if the file can't be created
+     */
     public void toXlsx(String filename) throws IOException {
         FileOutputStream file = new FileOutputStream(filename);
         this.workbook.write(file);
         file.close();
     }
 
-    private void toPdf(String filename, FormulaEvaluator evaluator) throws FileNotFoundException, DocumentException {
-        Document pdf = new Document();
-        PdfWriter.getInstance(pdf, new FileOutputStream(filename));
-        pdf.open();
-        PdfPTable table = new PdfPTable(8);
-        PdfPCell cell;
-        Sheet[] sheets = {this.workbook.getSheetAt(4), this.workbook.getSheetAt(5)};
-        DataFormatter df = new DataFormatter();
+    private void toPdf(String filename, int sheetnumber, int ncols, FormulaEvaluator evaluator) throws IOException, DocumentException {
+        this.workbook.write(new FileOutputStream("output.pdf"));
+        //PdfReader template = new PdfReader("excel_files/eal_page4_template2.pdf");
+        //PdfStamper stamper = new PdfStamper(template, new FileOutputStream("temp.pdf"));
+        //stamper.setFormFlattening(true);
 
-        for (Sheet s : sheets) {
-            Iterator iter = s.rowIterator();
+        //AcroFields fields = stamper.getAcroFields();
+        //fields.setGenerateAppearances(true);
 
-            while (iter.hasNext()) {
-                Row row = (Row) iter.next();
-                Iterator<Cell> celliter = row.cellIterator();
+        //if (fields.setField("page_title", "dasite")) {
+        //    System.out.println("Set the field.");
+        //}
+        //stamper.close();
+        //stamper.setFormFlattening(true);
+        //template.close();
+        //Document pdf = new Document();
+        //PdfWriter.getInstance(pdf, new FileOutputStream(filename));
+        //pdf.open();
+        //PdfPTable table = new PdfPTable(ncols);
+        //PdfPCell cell;
 
-                while (celliter.hasNext()) {
-                    Cell currentcell = celliter.next();
+        //Sheet sheet = this.workbook.getSheetAt(sheetnumber);
 
-                    if (currentcell.getCellTypeEnum() == CellType.BLANK) { break; }
-                    cell = new PdfPCell(new Phrase(df.formatCellValue(currentcell, evaluator)));
-                    table.addCell(cell);
-                }
-            }
-            pdf.add(table);
-        }
-        pdf.close();
+        ///* We need a DataFormatter in order to evaluate the cells. */
+        //DataFormatter df = new DataFormatter();
+
+        //Iterator iter = sheet.rowIterator();
+
+        //while (iter.hasNext()) {
+        //    Row row = (Row) iter.next();
+        //    Iterator<Cell> celliter = row.cellIterator();
+
+        //    while (celliter.hasNext()) {
+        //        Cell currentcell = celliter.next();
+
+        //        //if (currentcell.getCellTypeEnum() == CellType.BLANK) { break; }
+
+                /* Here is were we pass our evaluator to the DataFormatter. */
+
+        //        cell = new PdfPCell(new Phrase(df.formatCellValue(currentcell, evaluator)));
+        //        table.addCell(cell);
+        //    }
+        //}
+        //    pdf.add(table);
+        //pdf.close();
     }
 
+    /**
+     * Make a PDF table given rows and columns.
+     *
+     * @param   ncols   the number of columns in the table
+     * @param   nrows   the number of rows in the table
+     */
+    private void makePDFTable(final int ncols, final int nrows) {
+        PdfPTable table = new PdfPTable(ncols);
+        // Make the table header.
+        for (int i = 0; i < ncols; ++i) {
+            PdfPCell cell = new PdfPCell(new Phrase("haeder" + i));
+            table.addCell(cell);
+        }
+        // Add the labels. They need to span 5 rows.
+        PdfPCell cell = new PdfPCell(new Phrase("label"));
+    }
     /***************************************************************
      * Here begin the tests. They shouldn't be here, but they are. *
      ***************************************************************/
@@ -300,8 +350,10 @@ public class XlReader {
         /* Do the thing. */
         HashMap<String, String> formulae = findAllFormulae();
 
-        assert formulae.get("A3").equals("0");
-        assert formulae.get("B3").equals("SUM(B1:B2)");
+        formulae.forEach((k,v) -> System.out.format("key: %s   value: %s\n", k, v));
+
+        //assert formulae.get("A3").equals("0");
+        //assert formulae.get("B3").equals("SUM(B1:B2)");
     }
 
     private void testPopulate() {
@@ -329,7 +381,7 @@ public class XlReader {
         System.out.println("Testing evaluateAll");
 
         /* Do the thing. */
-        this.evaluateAll(0);
+        //this.evaluateAll(0);
 
         /* This is where we expect values. */
         String[] cellrefs = {"B1", "B2", "B3"};
@@ -358,12 +410,11 @@ public class XlReader {
         // Evaluate the data.
         FormulaEvaluator evaluator = xlreader.evaluateAll(2);
 
-        // Write it to xlsx.
+        // Write the results to xlsx.
         xlreader.toXlsx("testing.xlsx");
-        // Write it to pdf.
 
-        xlreader.toPdf("testing.pdf", evaluator);
-
+        // Write the resulting xlsx to pdf.
+        xlreader.toPdf("testing.pdf", 4, 5, evaluator);
 
         //xlreader.testGetAllFormulae();
         //xlreader.testPopulate();

@@ -5,5 +5,4 @@ out/
 *.class
 .~lock.*
 *.iml
-*.pdf
 ReportExample/
