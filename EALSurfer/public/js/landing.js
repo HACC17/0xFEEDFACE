@@ -6,7 +6,7 @@
                "rgba(171, 180, 201, 0.3)",
                "rgba(135, 199, 215, 0.3)"]
   var i = 0;
-  function draw() {
+function draw() {
     canvas.width = canvas.width;
     for(var j = waves.length - 1; j >= 0; j--) {
       var offset = i + j * Math.PI * 12;
@@ -51,7 +51,8 @@
       ctx.font = "Italic " + .6*canvas.height + 'px Ariel';
       ctx.fillText('Surfer', .42*canvas.width, .6*canvas.height, .4*canvas.width);
       ctx.strokeText('Surfer', .42*canvas.width, .6*canvas.height, .4*canvas.width);
+      document.getElementById("bannertitle").innerHTML = "<a href='/instructions'><h1>EAL <span style='font-family: Satisfy'>Surfer<sup>+</sup></span></h1></a>"
     }
     i = i + 3;
   }
-  setInterval("draw()", 22);
+  setInterval("draw()", 20);

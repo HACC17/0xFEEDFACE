@@ -62,8 +62,13 @@ canvas {
 }
 
 .fixed {
-  background-color: #F7F5E6;
+  background-color: rgba(247, 245, 230, 0.9);
   padding-top: 8%;
+}
+
+.glossaryterm {
+  font-size: 1.2rem;
+  font-weight: bold;
 }
 
 #bannertitle {
