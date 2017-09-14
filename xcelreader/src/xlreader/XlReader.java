@@ -4,13 +4,21 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
+import com.google.gson.Gson;
+import jdk.internal.org.objectweb.asm.TypeReference;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
+import org.codehaus.jackson.JsonFactory;
+import org.codehaus.jackson.JsonParser;
+import org.codehaus.jackson.JsonToken;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.util.JSONPObject;
 
 /**
  * This class represents a set of excel documents.
@@ -393,10 +401,26 @@ public class XlReader {
         assert (Double) cells.get("B3") == 42.0;
     }
 
+    private void populateXl(final String data) throws IOException {
+        Gson g = new Gson();
+
+        Map<String, Object> map = g.fromJson(data.replaceAll("\\s+", ""), Map.class);
+
+        map.forEach((k, v) -> {
+            Gson json = new Gson();
+            Map<String, Object> cells = json.fromJson(v.toString(), Map.class);
+
+            cells.forEach((kk, vv) -> {
+                System.out.format("Key: %s, Value: %s\n", kk, vv);
+            });
+        });
+
+    }
+
 
     public static void main(String[] args) throws IOException, DocumentException {
 
-        /* Check the command line arguments. */
+    //    /* Check the command line arguments. */
         if (args.length != 1) {
             System.out.format("args length %s", args.length);
             System.out.println("usage: java Main [excel filename]");
@@ -405,16 +429,34 @@ public class XlReader {
 
         String filename = args[0];
 
+        String data = "{sheet1:" +
+                            "{D5: 'Unrestricted'," +
+                             "D7: 'Drinking Water Resource'," +
+                             "D10: '>150m'," +
+                             "D14: 'Name'," +
+                             "C16: 'ACENAPHTHYLENE'," +
+                             "D22: ''," +
+                             "D24: ''," +
+                             "D26: '' }," +
+                        "sheet2:" +
+                            "{D4: 'Single Test Case'," +
+                             "D5: '456 Next Lane'," +
+                             "D6: 'Honolulu'," +
+                             "E6: 'HI'," +
+                             "F7: '96822'," +
+                             "D9: '2017-09-03'}";
+
         XlReader xlreader = new XlReader(filename);
+        xlreader.populateXl(data.replaceAll("\\s+", ""));
 
         // Evaluate the data.
-        FormulaEvaluator evaluator = xlreader.evaluateAll(2);
+        //FormulaEvaluator evaluator = xlreader.evaluateAll(2);
 
         // Write the results to xlsx.
-        xlreader.toXlsx("testing.xlsx");
+        //xlreader.toXlsx("testing.xlsx");
 
         // Write the resulting xlsx to pdf.
-        xlreader.toPdf("testing.pdf", 4, 5, evaluator);
+        //xlreader.toPdf("testing.pdf", 4, 5, evaluator);
 
         //xlreader.testGetAllFormulae();
         //xlreader.testPopulate();
