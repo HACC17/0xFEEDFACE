@@ -69,7 +69,12 @@ $( document ).ready(function() {
         xhttp.send();
     });
     
-    $("#submit").click(function(event){
+    /*
+    * Validate form and send form request to server
+    */
+    
+    $("#submit").on("click", function(event){
+        event.preventDefault();
         var formready = true;
         var reportOrder = [];
         /*
@@ -148,8 +153,10 @@ $( document ).ready(function() {
                     if (this.readyState == 4 && this.status == 200) {
                         
                     };
+                    console.log(this.status);
                 };
-            xhttp.open("GET", "/submit/"+JSON.stringify(reportOrder), true);
+
+            xhttp.open("GET", "/submit/"+ $.param( {"reportOrder" : reportOrder } ), true);
             xhttp.send();
         }
         else{
@@ -178,15 +185,4 @@ $( document ).ready(function() {
       ctx.bezierCurveTo(.8*canvas.width, .08*canvas.height, .8*canvas.width, .25*canvas.height, .7*canvas.width, .3*canvas.height);
       ctx.fillStyle = '#85d8ce';
       ctx.fill();
-      /*ctx.globalAlpha = 1;
-      ctx.fillStyle = '#085078';
-      ctx.strokeStyle = "black";
-      ctx.lineWidth = 3;
-      ctx.font = "Bold Italic " + .3*canvas.height + 'px Ariel';
-      ctx.strokeText('EAL', .1*canvas.width, .4*canvas.height, .3*canvas.width);
-      ctx.fillText('EAL', .1*canvas.width, .4*canvas.height, .3*canvas.width);
-      ctx.fillStyle = '#85d8ce';
-      ctx.font = "Italic " + .3*canvas.height + 'px Ariel';
-      ctx.fillText('Surfer', .42*canvas.width, .4*canvas.height, .4*canvas.width);
-      ctx.strokeText('Surfer', .42*canvas.width, .4*canvas.height, .4*canvas.width);*/
 });

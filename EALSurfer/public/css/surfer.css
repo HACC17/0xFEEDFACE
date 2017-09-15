@@ -71,6 +71,10 @@ canvas {
   font-weight: bold;
 }
 
+#submit {
+  width: 100%;
+}
+
 #bannertitle {
   color: white;
   width: 100%;
