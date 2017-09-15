@@ -75,8 +75,8 @@ app.get("/admin", function(req, res){
 
 app.get("/submit/:data", function(req, res){
     var rawFormData = req.params.data;
-    var formData = decodeURIComponent( rawFormData )
-    console.log(formData);
+    var formData = JSON.parse(decodeURI(rawFormData));
+    console.log(rawFormData);
 });
 
 app.get("/eal_spreadsheet", function(req, res){
