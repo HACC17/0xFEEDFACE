@@ -3,22 +3,16 @@ package xlreader;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import com.google.gson.Gson;
-import jdk.internal.org.objectweb.asm.TypeReference;
+import com.google.gson.stream.JsonReader;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
-import org.codehaus.jackson.JsonFactory;
-import org.codehaus.jackson.JsonParser;
-import org.codehaus.jackson.JsonToken;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.util.JSONPObject;
 
 /**
  * This class represents a set of excel documents.
@@ -35,6 +29,10 @@ public class XlReader {
     private final Workbook workbook;
     private final ArrayList<Sheet> sheets;
     private final int nsheets;
+
+    public class sheetarray {
+        String sheet;
+    }
 
     public XlReader(final String filename) throws IOException {
         this.filename = filename;
@@ -156,7 +154,7 @@ public class XlReader {
         FormulaEvaluator evaluator = this.workbook.getCreationHelper().createFormulaEvaluator();
         evaluator.evaluateAll();
         try {
-            this.toPdf("evalall.pdf", 4, 5, evaluator);
+            this.toPdf("evalall.pdf", sheetnumber, 5, evaluator);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (DocumentException e) {
@@ -280,7 +278,7 @@ public class XlReader {
      * @param   filename        the name of the new file
      * @throws  IOException     if the file can't be created
      */
-    public void toXlsx(String filename) throws IOException {
+    public void writeXlsx(String filename) throws IOException {
         FileOutputStream file = new FileOutputStream(filename);
         this.workbook.write(file);
         file.close();
@@ -288,49 +286,6 @@ public class XlReader {
 
     private void toPdf(String filename, int sheetnumber, int ncols, FormulaEvaluator evaluator) throws IOException, DocumentException {
         this.workbook.write(new FileOutputStream("output.pdf"));
-        //PdfReader template = new PdfReader("excel_files/eal_page4_template2.pdf");
-        //PdfStamper stamper = new PdfStamper(template, new FileOutputStream("temp.pdf"));
-        //stamper.setFormFlattening(true);
-
-        //AcroFields fields = stamper.getAcroFields();
-        //fields.setGenerateAppearances(true);
-
-        //if (fields.setField("page_title", "dasite")) {
-        //    System.out.println("Set the field.");
-        //}
-        //stamper.close();
-        //stamper.setFormFlattening(true);
-        //template.close();
-        //Document pdf = new Document();
-        //PdfWriter.getInstance(pdf, new FileOutputStream(filename));
-        //pdf.open();
-        //PdfPTable table = new PdfPTable(ncols);
-        //PdfPCell cell;
-
-        //Sheet sheet = this.workbook.getSheetAt(sheetnumber);
-
-        ///* We need a DataFormatter in order to evaluate the cells. */
-        //DataFormatter df = new DataFormatter();
-
-        //Iterator iter = sheet.rowIterator();
-
-        //while (iter.hasNext()) {
-        //    Row row = (Row) iter.next();
-        //    Iterator<Cell> celliter = row.cellIterator();
-
-        //    while (celliter.hasNext()) {
-        //        Cell currentcell = celliter.next();
-
-        //        //if (currentcell.getCellTypeEnum() == CellType.BLANK) { break; }
-
-                /* Here is were we pass our evaluator to the DataFormatter. */
-
-        //        cell = new PdfPCell(new Phrase(df.formatCellValue(currentcell, evaluator)));
-        //        table.addCell(cell);
-        //    }
-        //}
-        //    pdf.add(table);
-        //pdf.close();
     }
 
     /**
@@ -403,17 +358,28 @@ public class XlReader {
 
     private void populateXl(final String data) throws IOException {
         Gson g = new Gson();
+        JsonReader jsonReader = new JsonReader(new StringReader(data.replaceAll("\\s+", "").trim()));
+        jsonReader.setLenient(true);
+        Map<String, Object> result = g.fromJson(jsonReader, Map.class);
 
-        Map<String, Object> map = g.fromJson(data.replaceAll("\\s+", ""), Map.class);
-
-        map.forEach((k, v) -> {
-            Gson json = new Gson();
-            Map<String, Object> cells = json.fromJson(v.toString(), Map.class);
-
-            cells.forEach((kk, vv) -> {
-                System.out.format("Key: %s, Value: %s\n", kk, vv);
-            });
+        result.forEach((k, v) -> {
+            System.out.format("Key: %s, Value: %s", k, v);
         });
+
+
+
+        //Map<String, Object> map = g.fromJson(data.replaceAll("\\s+", ""), Map.class);
+
+        //map.forEach((k, v)-> {
+        //    System.out.format("Key: %s, Value: %s\n", k, v);
+        //});
+        //map.forEach((k, v) -> {
+            //Gson json = new Gson();
+            //Map<String, Object> cells = json.fromJson(v.toString(), Map.class);
+
+            //cells.forEach((kk, vv) -> {
+            //});
+        //});
 
     }
 
@@ -421,33 +387,17 @@ public class XlReader {
     public static void main(String[] args) throws IOException, DocumentException {
 
     //    /* Check the command line arguments. */
-        if (args.length != 1) {
-            System.out.format("args length %s", args.length);
-            System.out.println("usage: java Main [excel filename]");
-            System.exit(2);
-        }
+        if (args.length != 1) { System.exit(2); }
 
-        String filename = args[0];
 
-        String data = "{sheet1:" +
-                            "{D5: 'Unrestricted'," +
-                             "D7: 'Drinking Water Resource'," +
-                             "D10: '>150m'," +
-                             "D14: 'Name'," +
-                             "C16: 'ACENAPHTHYLENE'," +
-                             "D22: ''," +
-                             "D24: ''," +
-                             "D26: '' }," +
-                        "sheet2:" +
-                            "{D4: 'Single Test Case'," +
-                             "D5: '456 Next Lane'," +
-                             "D6: 'Honolulu'," +
-                             "E6: 'HI'," +
-                             "F7: '96822'," +
-                             "D9: '2017-09-03'}";
+        String data = args[0];
 
-        XlReader xlreader = new XlReader(filename);
-        xlreader.populateXl(data.replaceAll("\\s+", ""));
+        String master = "excel_files/eal_surfer_master.xlsx";
+        XlReader xlreader = new XlReader(master);
+        xlreader.populateXl(data);
+
+        //xlreader.evaluateAll(4);
+        //xlreader.writeXlsx("new.xlsx");
 
         // Evaluate the data.
         //FormulaEvaluator evaluator = xlreader.evaluateAll(2);
