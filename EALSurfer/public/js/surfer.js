@@ -122,7 +122,7 @@ $( document ).ready(function() {
            } 
            else userChemicals[i].classList.remove("invalid");
            var formRequest = {
-               "sheet1" : {
+               "sheet2" : {
                    "D5" : landuse,
                    "D7" : groundwaterutility,
                    "D10" : distancetowater,
@@ -132,7 +132,7 @@ $( document ).ready(function() {
                    "D24": groundwatersamples[i].value,
                    "D26": soilvaporsamples[i].value
                             },
-               "sheet2" : {
+               "sheet4" : {
                    "D4" : siteinfo[0].value,
                    "D5" : siteinfo[1].value,
                    "D6" : siteinfo[2].value,
@@ -156,7 +156,7 @@ $( document ).ready(function() {
                     console.log(this.status);
                 };
 
-            xhttp.open("GET", "/submit/"+ $.param( {"reportOrder" : reportOrder } ), true);
+            xhttp.open("GET", "/submit/"+ JSON.stringify(reportOrder), true);
             xhttp.send();
         }
         else{
