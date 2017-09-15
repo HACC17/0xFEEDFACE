@@ -358,7 +358,7 @@ public class XlReader {
 
     private void populateXl(final String data) throws IOException {
         Gson g = new Gson();
-        JsonReader jsonReader = new JsonReader(new StringReader(data.replaceAll("\\s+", "").trim()));
+        JsonReader jsonReader = new JsonReader(new StringReader(data));
         jsonReader.setLenient(true);
         Map<String, Object> result = g.fromJson(jsonReader, Map.class);
 
