@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.google.gson.Gson;
+import com.google.gson.internal.LinkedTreeMap;
 import com.google.gson.stream.JsonReader;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
@@ -358,12 +359,20 @@ public class XlReader {
 
     private void populateXl(final String data) throws IOException {
         Gson g = new Gson();
-        JsonReader jsonReader = new JsonReader(new StringReader(data));
+        JsonReader jsonReader = new JsonReader(new StringReader(data.replaceAll("\\s+", "")));
         jsonReader.setLenient(true);
-        Map<String, Object> result = g.fromJson(jsonReader, Map.class);
+        Map<String, LinkedTreeMap> result = g.fromJson(jsonReader, Map.class);
 
-        result.forEach((k, v) -> {
-            System.out.format("Key: %s, Value: %s", k, v);
+        result.forEach((sheet, v) -> {
+            Integer sheetnum = Integer.parseInt(sheet.substring(Math.max(sheet.length() - 1, 0)));
+            v.entrySet().forEach((vv) -> {
+                String[] parts = vv.toString().split("=");
+                String cell = parts[0].substring(Math.max(parts[0].length() -2, 0));
+                String value = parts[1];
+
+                System.out.format("Sheet: %d, Key: %s, Value: %s\n", sheetnum, cell, value);
+                this.populate(sheetnum, cell, value);
+            });
         });
 
 
