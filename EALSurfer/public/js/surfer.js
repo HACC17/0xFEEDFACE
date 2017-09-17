@@ -151,9 +151,8 @@ $( document ).ready(function() {
            var xhttp = new XMLHttpRequest();
            xhttp.onreadystatechange = function() {
                     if (this.readyState == 4 && this.status == 200) {
-                        
+                        $("body").html(this.response);
                     };
-                    console.log(this.status);
                 };
             xhttp.open("GET", "/submit/" + $.param({"reportOrder" : reportOrder}), true);
             xhttp.send();
