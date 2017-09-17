@@ -40,8 +40,13 @@ canvas {
   -ms-interpolation-mode: nearest-neighbor;   /* IE                            */
 }
 
+ol li {
+  margin: 10px 0;
+}
+
 .maindisplay {
 	width:90%;
+	height: 100%;
 	padding:5%;
 	background-color: white;
 	margin: 20px;

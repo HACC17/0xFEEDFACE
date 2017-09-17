@@ -147,18 +147,20 @@ $( document ).ready(function() {
        $('.tooltipped').tooltip({delay: 50});
        Materialize.updateTextFields();
        if(formready){
-           document.getElementById("invalidform").innerHTML = "";
-           var xhttp = new XMLHttpRequest();
-           xhttp.onreadystatechange = function() {
-                    if (this.readyState == 4 && this.status == 200) {
-                        $("body").html(this.response);
-                    };
-                };
-            xhttp.open("GET", "/submit/" + $.param({"reportOrder" : reportOrder}), true);
-            xhttp.send();
+           $("#invalidform").html("");
+           $('#loading').html("<div style='text-align:center;'><h5>Thanks!</h5> <p>Your forms are being created, please stay on this page. <br> (This should only take a minute)</p></div>")
+           console.log('loading');
+           $.ajax({
+               type:"GET",
+               url: "/submit/" + $.param({"reportOrder" : reportOrder}),
+               success: function(response){
+                   console.log('done');
+                   $(".maindisplay").html(response);
+               }
+           });
         }
         else{
-            document.getElementById("invalidform").innerHTML = "<p style='color: red'>Oops! Please correct all fields marked in red.</p>";
+            $("#invalidform").html("<p style='color: red'>Oops! Please correct all fields marked in red.</p>");
         }
     });
 	    
