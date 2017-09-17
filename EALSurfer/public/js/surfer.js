@@ -155,8 +155,7 @@ $( document ).ready(function() {
                     };
                     console.log(this.status);
                 };
-
-            xhttp.open("GET", "/submit/"+ JSON.stringify(reportOrder), true);
+            xhttp.open("GET", "/submit/" + $.param({"reportOrder" : reportOrder}), true);
             xhttp.send();
         }
         else{

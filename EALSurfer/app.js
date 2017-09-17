@@ -1,5 +1,6 @@
-var express = require("express"); //framework
-var XLSX = require("xlsx"); //for processing excel files
+var express = require('express'); //framework
+var XLSX = require('xlsx'); //for processing excel files
+var qs = require('qs');
 var app = express();
 
 
@@ -75,8 +76,8 @@ app.get("/admin", function(req, res){
 
 app.get("/submit/:data", function(req, res){
     var rawFormData = req.params.data;
-    var formData = JSON.parse(decodeURI(rawFormData));
-    console.log(rawFormData);
+    var FormData = qs.parse(rawFormData);
+    console.log(JSON.stringify(FormData.reportOrder));
 });
 
 app.get("/eal_spreadsheet", function(req, res){
