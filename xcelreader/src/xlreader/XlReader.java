@@ -72,16 +72,19 @@ public class XlReader {
         Workbook wb = null;
 
         try {
-            String ext = filename.substring(filename.indexOf("."));
+            String ext = "";
+            int i = filename.lastIndexOf('.');
+            if (i > 0) { ext = filename.substring(i+1); }
 
-            if (ext.equals(".xls")) {
+            if (ext.equals("xls")) {
                 wb = new HSSFWorkbook(fin);
             }
-            else if (ext.equals(".xlsx")) {
+            else if (ext.equals("xlsx")) {
                 wb = new XSSFWorkbook(fin);
             }
             else {
-                System.out.println("Unsupported file type.");
+                System.out.println(ext);
+                System.out.println("Crap! Unsupported file type.");
                 System.exit(1);
             }
         }
@@ -359,6 +362,7 @@ public class XlReader {
 
     private void populateXl(final String data) throws IOException {
         Gson g = new Gson();
+        System.out.println("populating...");
         JsonReader jsonReader = new JsonReader(new StringReader(data.replaceAll("\\s+", "")));
         jsonReader.setLenient(true);
         Map<String, LinkedTreeMap> result = g.fromJson(jsonReader, Map.class);
@@ -368,10 +372,12 @@ public class XlReader {
             v.entrySet().forEach((vv) -> {
                 String[] parts = vv.toString().split("=");
                 String cell = parts[0].substring(Math.max(parts[0].length() -2, 0));
-                String value = parts[1];
+                String value = "";
+                if (parts.length == 2) { value = parts[1]; }
+                //String value = parts[1];
 
                 System.out.format("Sheet: %d, Key: %s, Value: %s\n", sheetnum, cell, value);
-                this.populate(sheetnum, cell, value);
+                //this.populate(sheetnum, cell, value);
             });
         });
 
@@ -394,6 +400,7 @@ public class XlReader {
 
 
     public static void main(String[] args) throws IOException, DocumentException {
+        System.out.println("Hello");
 
     //    /* Check the command line arguments. */
         if (args.length != 1) { System.exit(2); }
@@ -401,7 +408,7 @@ public class XlReader {
 
         String data = args[0];
 
-        String master = "excel_files/eal_surfer_master.xlsx";
+        String master = "../../../excel_files/eal_surfer_master.xlsx";
         XlReader xlreader = new XlReader(master);
         xlreader.populateXl(data);
 
