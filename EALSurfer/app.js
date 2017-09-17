@@ -3,6 +3,8 @@ var XLSX = require('xlsx'); //for processing excel files
 var qs = require('qs');
 var app = express();
 
+const { exec } = require('child_process');
+
 
 app.use(express.static("public")); //point express to public folder
 app.set("view engine", "ejs"); //use embedded java script
@@ -51,6 +53,31 @@ Get necessary data for client end.
 */
 chemRefProcessor("public/uploads/master_spreadsheet_files/test.xlsx");
 
+/*
+Calls the xcelreader.jar with client form data as argument, if that promise
+resolves, another new promise is made with executing libreoffice pdf convert
+*/
+var processForm = function (formData) {
+    var convertCommand = "libreoffice --headless --convert-to pdf ~/workspace/0xFEEDFACE/EALSurfer/public/uploads/master_spreadsheet_files/test.xlsx --outdir ~/workspace/0xFEEDFACE/EALSurfer/public/clientpdfs";
+    return new Promise(function(resolve, reject) {
+        exec('node -v', (err, stdout, stderr) => {
+            if(err) {
+                reject(err);
+                return;
+            }
+            resolve(new Promise( function(resolve, reject) {
+                exec(convertCommand, (err, stdout, stderr) => {
+                if(err) {
+                    reject(err);
+                    return;
+                }
+                resolve(stdout);
+            });
+        }));
+        });
+    });
+}
+
 
 app.get("/", function(req, res){
     res.render("landingpage");
@@ -75,9 +102,16 @@ app.get("/admin", function(req, res){
 });
 
 app.get("/submit/:data", function(req, res){
+    console.log("Form submission:");
     var rawFormData = req.params.data;
     var FormData = qs.parse(rawFormData);
-    console.log(JSON.stringify(FormData.reportOrder));
+    var forJava = "'" + JSON.stringify(FormData.reportOrder) + "'";
+    res.render("landingpage");
+    processForm(forJava).then(function(result) {
+        console.log(result); // "Stuff worked!"
+        }, function(err) {
+        console.log(err); // Error: "It broke"
+    });
 });
 
 app.get("/eal_spreadsheet", function(req, res){
@@ -111,20 +145,8 @@ app.get("/chemdata/:index/:drinking/:distance/:use", function(req, res){
 * For later...                                                                *
 *******************************************************************************/
 
-app.get("/java/:statement", function(req, res){
-   var statement = req.params.statement;
-    var error1;
-    var error2;
-    var exec = require('child_process').exec, child;
-    child = exec('java -cp ~/workspace/0xFEEDFACE/EALSurfer/java/hello.jar com.hacc2017.hello',
-        function (error, stdout, stderr){
-            console.log('stdout: ' + stdout);
-            console.log('stderr: ' + stderr);
-             if(error !== null){
-                console.log('exec error: ' + error);
-        }
-    });
-   res.render("java", {statement: statement});
+var makeExcell = new Promise(function(resolve, reject) {
+    
 });
 
 app.post("/uploads", function(req, res){
@@ -134,5 +156,5 @@ app.post("/uploads", function(req, res){
 });
 
 app.listen(process.env.PORT, process.env.IP, function() {
-   console.log("Server running...")
+   console.log("Server running...");
 });
