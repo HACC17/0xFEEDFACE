@@ -363,21 +363,52 @@ public class XlReader {
     private void populateXl(final String data) throws IOException {
         Gson g = new Gson();
         System.out.println("populating...");
-        JsonReader jsonReader = new JsonReader(new StringReader(data.replaceAll("\\s+", "")));
+        System.out.println("data: " + data);
+        JsonReader jsonReader = null;
         jsonReader.setLenient(true);
+        jsonReader = new JsonReader(new StringReader(data.replaceAll("\\s+", "")));
         Map<String, LinkedTreeMap> result = g.fromJson(jsonReader, Map.class);
 
         result.forEach((sheet, v) -> {
             Integer sheetnum = Integer.parseInt(sheet.substring(Math.max(sheet.length() - 1, 0)));
             v.entrySet().forEach((vv) -> {
                 String[] parts = vv.toString().split("=");
-                String cell = parts[0].substring(Math.max(parts[0].length() -2, 0));
+                String cellref = parts[0].substring(Math.max(parts[0].length() -2, 0));
                 String value = "";
-                if (parts.length == 2) { value = parts[1]; }
-                //String value = parts[1];
 
-                System.out.format("Sheet: %d, Key: %s, Value: %s\n", sheetnum, cell, value);
-                //this.populate(sheetnum, cell, value);
+                Sheet thissheet = this.workbook.getSheetAt(4);
+                if (parts.length == 2) { value = parts[1]; }
+
+                CellReference ref = new CellReference(cellref);
+                Row row = thissheet.getRow(ref.getRow());
+                Cell cell = row.getCell(ref.getCol());
+                System.out.println(value);
+
+                Boolean success = false;
+                switch (cell.getCellTypeEnum()) {
+                    case FORMULA:
+                        cell.setCellFormula(value);
+                        success = true;
+                        break;
+                    case BLANK:
+                        break;
+                    case STRING:
+                        cell.setCellValue(value);
+                        success = true;
+                        break;
+                    case BOOLEAN:
+                        cell.setCellValue(Boolean.parseBoolean(value));
+                        success = true;
+                        break;
+                    case NUMERIC:
+                        cell.setCellValue(Double.parseDouble(value));
+                        success = true;
+                        break;
+                    case ERROR:
+                        break;
+                    case _NONE:
+                        break;
+                }
             });
         });
 
@@ -408,7 +439,7 @@ public class XlReader {
 
         String data = args[0];
 
-        String master = "../../../excel_files/eal_surfer_master.xlsx";
+        String master = "../xcelreader/excel_files/eal_surfer_master.xlsx";
         XlReader xlreader = new XlReader(master);
         xlreader.populateXl(data);
 
