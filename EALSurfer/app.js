@@ -56,13 +56,15 @@ chemRefProcessor("public/uploads/master_spreadsheet_files/test.xlsx");
 /*
 Calls the xcelreader.jar with client form data as argument, if that promise
 resolves, another new promise is made with executing libreoffice pdf convert
+
+java -jar ~/workspace/0xFEEDFACE/xcelreader/out/artifacts/xcelreader_jar/xcelreader.jar  + formData
 */
 var processForm = function (formData) {
     var convertCommand = "libreoffice --headless --convert-to pdf ~/workspace/0xFEEDFACE/EALSurfer/public/uploads/master_spreadsheet_files/test.xlsx --outdir ~/workspace/0xFEEDFACE/EALSurfer/public/clientpdfs";
     return new Promise(function(resolve, reject) {
-        exec('node -v', (err, stdout, stderr) => {
+        exec('pwd', (err, stdout, stderr) => {
             if(err) {
-                reject(err);
+                reject(stdout + " " + err);
                 return;
             }
             resolve(new Promise( function(resolve, reject) {
