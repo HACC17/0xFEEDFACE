@@ -13,7 +13,6 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import com.itextpdf.text.*;
-import org.apache.xpath.operations.Bool;
 
 /**
  * This class represents a set of excel documents.
@@ -303,6 +302,7 @@ public class XlReader {
     public Boolean writeXlsx(String filename) throws IOException {
         Boolean success = true;
         FileOutputStream file = null;
+        XSSFWorkbook wb = (XSSFWorkbook) this.workbook;
 
         try {
             file = new FileOutputStream(filename);
@@ -311,7 +311,15 @@ public class XlReader {
             e.printStackTrace();
         }
         try {
-            this.workbook.write(file);
+            // Have to remove in reverse order so we don't change the state
+            // of the workbook for future loops.
+            for (int i = wb.getNumberOfSheets()-1; i >= 0; --i) {
+                if (i != 4 && i != 5) {
+                    wb.removeSheetAt(i);
+                    System.out.println("Removed sheet at "+ i);
+                }
+            }
+            wb.write(file);
         } catch (IOException e) {
             success = false;
             e.printStackTrace();
