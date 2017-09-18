@@ -116,26 +116,6 @@ public class XlReader {
         return formulae;
     }
 
-
-    /**
-     * Evaluate a formula in a cell.
-     *
-     * @param   sheetnumber
-     * @param   cellreference
-     */
-    public void evaluateFormula(final int sheetnumber, final String cellreference) {
-        if (sheetnumber > this.nsheets) {
-            System.exit(1);
-        }
-        FormulaEvaluator evaluator = this.workbook.getCreationHelper().createFormulaEvaluator();
-        CellReference cellref = new CellReference(cellreference);
-        Sheet sheet = this.workbook.getSheetAt(sheetnumber);
-        Row row = sheet.getRow(cellref.getRow());
-        Cell cell = row.getCell(cellref.getCol());
-
-        CellValue val = evaluator.evaluate(cell);
-    }
-
     /**
      * Evaluate all the cells in a Sheet.
      *
@@ -157,14 +137,6 @@ public class XlReader {
             success = false;
         }
         return success;
-        //return evaluator;
-    }
-
-    /**
-     * @return  the number of sheets in this workbook
-     */
-    public int getNsheets() {
-        return this.nsheets;
     }
 
     /**
@@ -219,64 +191,13 @@ public class XlReader {
     }
 
     /**
-     * Given a map of {cell : value} populate each cell with the value.
+     * Populate a cell from the nth sheet.
      *
-     * @param   sheetnumber     the number of the sheet in the workbook
-     * @param   map             a map containing {cell : value} pairs
-     * @return                  true if population is successful
+     * @param n         the sheet number
+     * @param celref    the cell reference e.g. "B9"
+     * @param val       the value to populate the cell with
+     * @return          true if everything worked
      */
-    public Boolean populate(final int sheetnumber, HashMap<String, Object> map) {
-
-        Boolean success = false;
-
-        Sheet sheet = this.workbook.getSheetAt(sheetnumber);
-
-        map.forEach((k, v) -> {
-            System.out.format("%s   %s\n", k, v.toString());
-        });
-
-        for (HashMap.Entry<String, Object> item : map.entrySet()) {
-            CellReference ref = new CellReference(item.getKey());
-            Row row = sheet.getRow(ref.getRow());
-            Cell cell = row.getCell(ref.getCol());
-
-            switch (cell.getCellTypeEnum()) {
-                case FORMULA:
-                    cell.setCellFormula(item.getValue().toString());
-                    success = true;
-                    break;
-                case BLANK:
-                    success = true;
-                    break;
-                case STRING:
-                    //System.out.format("sval: %s\n", item.getValue());
-                    cell.setCellValue((String) item.getValue());
-                    success = true;
-                    break;
-                case BOOLEAN:
-                    cell.setCellValue((Boolean) item.getValue());
-                    success = true;
-                    break;
-                case NUMERIC:
-                    if (item.getValue().toString().equals("")) {
-                        break;
-                    }
-                    //System.out.format("val: %d\n", Double.parseDouble(item.getValue().toString()));
-                    cell.setCellValue(Double.parseDouble(item.getValue().toString()));
-                    success = true;
-                    break;
-                case ERROR:
-                    success = false;
-                    break;
-                case _NONE:
-                    success = true;
-                    break;
-            }
-        }
-        return success;
-    }
-
-
     private Boolean populate(int n, Object celref, Object val) {
             Boolean success = false;
             Sheet sheet = this.workbook.getSheetAt(n);
@@ -320,34 +241,6 @@ public class XlReader {
         return success;
     }
 
-    private Boolean populateXl(final String data) throws IOException {
-        // This we are using a boolean array here because we can't modify
-        // a local variable inside a lambda. I could have refactored the
-        // forEach loops into for loops, but this was less work.
-        Boolean[] success = new Boolean[1];
-        success[0] = true;
-        Gson g = new Gson();
-        JsonReader jsonReader = new JsonReader(new StringReader(data.replaceAll("\\s+", "")));
-        jsonReader.setLenient(true);
-
-        ArrayList<Map<String, LinkedTreeMap>> result = g.fromJson(jsonReader, ArrayList.class);
-
-        for (Map<String, LinkedTreeMap> sheetmap : result) {
-            sheetmap.forEach((sheetnum, treemap) -> {
-
-                int sheetnumber = Integer.parseInt(sheetnum.replaceAll("^sheet", ""));
-                HashMap<String, Object> sheetdata = new HashMap<>();
-
-                treemap.forEach((k, v) -> {
-                    sheetdata.put(k.toString(), v.toString());
-                    success[0] = this.populate(sheetnumber, sheetdata);
-                });
-            });
-        }
-        return success[0];
-    }
-
-
     /**
      * Write the entire excel file to a new excel file.
      *
@@ -366,6 +259,7 @@ public class XlReader {
             file = new FileOutputStream(filename);
         } catch (FileNotFoundException e) {
             success = false;
+            System.out.println("dafu???");
             e.printStackTrace();
         }
         try {
@@ -401,6 +295,14 @@ public class XlReader {
         return result;
     }
 
+    /**
+     * Loop through all the data from the site, fill out all the forms, and
+     * finally write the new excel files.
+     *
+     * @param args  a json string like [{"sheet1": {cell:value},..., "sheetn":...}
+     * @throws IOException
+     * @throws DocumentException
+     */
     public static void main(String[] args) throws IOException, DocumentException {
 
         //    /* Check the command line arguments. */
@@ -409,57 +311,78 @@ public class XlReader {
         }
 
         String data = args[0];
+        System.out.println(data);
 
         String master = "../xcelreader/excel_files/eal_surfer_master.xlsx";
+        String outputdir = "./public/clientxlsx/";
         XlReader xlreader = new XlReader(master);
 
         ArrayList<Map<String, LinkedTreeMap>> alldata = xlreader.json2Map(data);
+
+        System.out.format("length: %s", alldata.size());
+
         Boolean evaluatedworked = false;
         Boolean writeworked = false;
         final Boolean[] populateworked = {false};
 
+        String name = new String();
+        // Loop through all the workbooks in the data array.
         for (Map<String, LinkedTreeMap> chunk : alldata) {
+
             String chemicalname = new String();
             String sitename = new String();
             String sitedate = new String();
 
+            // Loop through the data for each sheet.
             for (Map.Entry<String, LinkedTreeMap> entry : chunk.entrySet()) {
+
                 String sheet = entry.getKey();
                 LinkedTreeMap celldata = entry.getValue();
 
+                // Get the name parts.
                 if (sheet.equals("sheet2")) {
+                    System.out.println("sheet2");
                     chemicalname = celldata.get("C16").toString();
-                } else if (sheet.equals("sheet4")) {
+                }
+                if (sheet.equals("sheet4")) {
+                    System.out.println("sheet4");
                     sitename = celldata.get("D4").toString().replaceAll(" ", "_");
                     sitedate = celldata.get("D9").toString().replaceAll(" ", "_");
                 }
+
+                // Populate all the data.
                 celldata.forEach((cellref, cellval) -> {
                     int n = (int) Integer.parseInt(sheet.replaceAll("^sheet", ""));
                     populateworked[0] = xlreader.populate(n, cellref, cellval);
-                });
-            }
-            String name = String.format("%s_%s_%s.xlsx", sitename, chemicalname, sitedate);
+                }); // END loop through cell data.
 
-            // Evaluate the workbook.
-            try {
-                evaluatedworked = xlreader.evaluateAll();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (DocumentException e) {
-                e.printStackTrace();
-            }
+                // Construct the filename.
+                name = String.format("%s%s_%s_%s.xlsx", outputdir, sitename, chemicalname, sitedate);
 
-            // Write the results.
-            try {
-                xlreader.writeXlsx(String.format("%s", name));
-                System.out.format("%d", 0);
-                System.exit(0);
-            } catch (IOException e) {
-                e.printStackTrace();
-                System.out.format("%d", 1);
-                System.exit(1);
-            }
+            } // END loop through chunks entrys
+
+        } // END loop through chunks
+        // Evaluate the workbook.
+        try {
+            evaluatedworked = xlreader.evaluateAll();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (DocumentException e) {
+            e.printStackTrace();
         }
+
+        // Write the results.
+        try {
+            xlreader.writeXlsx(String.format("%s", name));
+            System.out.format("%d", 0);
+            System.exit(0);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.format("%d", 1);
+            System.exit(1);
+        }
+
+        // Check the status. And we're done.
         if (populateworked[0] && evaluatedworked && writeworked) {
             System.exit(0);
         } else {

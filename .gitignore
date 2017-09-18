@@ -5,3 +5,4 @@ lib/poi-3.16/docs/
 .~lock.*
 *.iml
 ReportExample/
+clientxlsx/
