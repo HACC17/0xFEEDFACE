@@ -72,12 +72,12 @@ app.get("/submit/:data", function(req, res){
     var rawFormData = req.params.data;
     var FormData = qs.parse(rawFormData);
     var fileNames = [];
-    var finalPDFNAME = FormData.reportOrder[0].sheet4.D4.replace(/\s+/g, '') + FormData.reportOrder[0].sheet4.D9.replace(/\s+/g, '') + ".pdf";
+    var finalPDFNAME = ""+ FormData.reportOrder[0].sheet4.D4.replace(/\s+/g, '') + FormData.reportOrder[0].sheet4.D9.replace(/\s+/g, '') + ".pdf";
     for(var i =0; i < FormData.reportOrder.length; i++){
         fileNames.push(FormData.reportOrder[i].sheet4.D4 + "_" + FormData.reportOrder[i].sheet2.C16 + "_" + FormData.reportOrder[i].sheet4.D9 +".xlsx"); 
     };
     var forJava = "'" + JSON.stringify(FormData.reportOrder) + "'";
-    processForm(forJava, fileNames).then(function(result) { //see function processForm below
+    processForm(forJava, fileNames, finalPDFNAME).then(function(result) { //see function processForm below
         console.log(result);
         res.render("download", {downloadLink : "/download/" + finalPDFNAME});
         }, function(err) {
@@ -121,16 +121,18 @@ app.post("/uploads", function(req, res){
 
 var processForm = function (forJava, fileNames, finalPDFNAME) {
     return new Promise(function(resolve, reject) {
+        console.log(fileNames);
         exec('java -jar ~/workspace/0xFEEDFACE/xcelreader/out/artifacts/xcelreader_jar/xcelreader.jar '  + forJava, (err, stdout, stderr) => {
             if(stdout==0){
                 resolve(new Promise( function(resolve, reject) {
-                    var header = "libreoffice --headless --convert-to pdf ~/workspace/0xFEEDFACE/EALSurfer/public/clientxlsx/";
+                    var header = "libreoffice --headless --convert-to pdf  ~/workspace/0xFEEDFACE/EALSurfer/public/clientxlsx/";
                     var footer = " --outdir ~/workspace/0xFEEDFACE/EALSurfer/public/clientpdfs";
-                    var convertCommand;
+                    var convertCommand = "";
                     for(var i = 0; i < fileNames.length; i++){
-                        if(i == fileNames.length-1) convertCommand = header + fileNames[i] + footer;
-                        else convertCommand = header + fileNames[i] + footer + " && ";
+                        if(i == fileNames.length-1) convertCommand += header + fileNames[i] + footer;
+                        else convertCommand += header + fileNames[i] + footer + " ; ";
                     }
+                    console.log(convertCommand);
                     exec(convertCommand, (err, stdout, stderr) => {
                     if(err !== null) {
                         console.log(stdout);
