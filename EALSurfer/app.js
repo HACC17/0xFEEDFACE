@@ -140,6 +140,7 @@ var processForm = function (forJava, fileNames, finalPDFNAME) {
                         for(var i = 0; i <fileNames.length; i++){
                             fileNames[i] = "~/workspace/0xFEEDFACE/EALSurfer/public/clientpdfs/" + fileNames[i].replace('xlsx', 'pdf');
                         }
+                        console.log(fileNames.length);
                         if(fileNames.length > 1){
                             var mergeCommand = "pdftk";
                             for(var i = 0; i < fileNames.length; i++){
@@ -154,6 +155,7 @@ var processForm = function (forJava, fileNames, finalPDFNAME) {
                                 resolve();
                             });
                         }
+                        else{
                         var changeName = "mv " + fileNames[0] + " ~/workspace/0xFEEDFACE/EALSurfer/public/clientpdfs/" + finalPDFNAME;
                         exec(changeName, (err, stdout, stderr) => {
                             if(err !== null) {
@@ -161,6 +163,7 @@ var processForm = function (forJava, fileNames, finalPDFNAME) {
                                 return;
                             }
                         });
+                        }
                         resolve(); 
                         }));
                     });
