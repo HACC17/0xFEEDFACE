@@ -55,8 +55,8 @@ app.get("/master_file", function(req, res){
 });
 
 app.get("/download/:userFilePath", function(req, res){
-    var fileName = req.param.userFilePath;
-    res.download("public/clientpdfs/"+fileName, fileName)
+    var fileName = req.params.userFilePath;
+    res.download("public/clientpdfs/" + fileName, fileName)
 });
 
 app.get("/glossary", function(req, res){
@@ -155,7 +155,6 @@ var processForm = function (forJava, fileNames, finalPDFNAME) {
                             });
                         }
                         var changeName = "mv " + fileNames[0] + " ~/workspace/0xFEEDFACE/EALSurfer/public/clientpdfs/" + finalPDFNAME;
-                        console.log(changeName);
                         exec(changeName, (err, stdout, stderr) => {
                             if(err !== null) {
                                 reject(err);
