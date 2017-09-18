@@ -6,3 +6,4 @@ lib/poi-3.16/docs/
 *.iml
 ReportExample/
 clientxlsx/
+clientpdfs/
