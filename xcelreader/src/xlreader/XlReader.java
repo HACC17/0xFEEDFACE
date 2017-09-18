@@ -342,7 +342,6 @@ public class XlReader {
 
         ArrayList<Map<String, LinkedTreeMap>> alldata = xlreader.json2Map(data);
 
-
         Boolean evaluatedworked = false;
         Boolean writeworked = false;
         final Boolean[] populateworked = {false};
@@ -377,8 +376,6 @@ public class XlReader {
                     populateworked[0] = xlreader.populate(n, cellref, cellval);
                 }); // END loop through cell data.
 
-                //xlreader.populate(2, "D14", "Chemical Name");
-
                 if (sheet.equals("sheet4")) {
                     // Construct the filename.
                     name = String.format("%s%s_%s_%s.xlsx", outputdir, sitename, chemicalname, sitedate);
@@ -391,11 +388,21 @@ public class XlReader {
                     } catch (DocumentException e) {
                         e.printStackTrace();
                     }
+
                     // Write the results.
                     try {
                         writeworked = xlreader.writeXlsx(name);
-                        //System.out.format("%d", 0);
-                        //System.exit(0);
+
+                        // Make a copy and remove unwanted sheets.
+                        XlReader reader1 = new XlReader(name);
+                        int size = reader1.workbook.getNumberOfSheets() - 1;
+
+                        for (int i = size; i >= 0; --i) {
+                            if (i != 4 && i != 5) {
+                                reader1.workbook.removeSheetAt(i);
+                            }
+                        }
+                        reader1.writeXlsx(name);
                     } catch (IOException e) {
                         e.printStackTrace();
                         System.out.format("%d", 1);
@@ -404,7 +411,6 @@ public class XlReader {
                 }
             } // END loop through chunks entrys
         } // END loop through chunks
-
 
         // Check the status. And we're done.
         if (populateworked[0] && evaluatedworked && writeworked) {
