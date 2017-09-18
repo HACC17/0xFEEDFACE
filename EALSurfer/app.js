@@ -72,14 +72,10 @@ app.get("/submit/:data", function(req, res){
     var rawFormData = req.params.data;
     var FormData = qs.parse(rawFormData);
     var fileNames = [];
-    var finalPDFNAME = FormData.reportOrder[0].sheet4.D4.replace(/\s+/g, '') + + FormData.reportOrder[0].sheet4.D9.replace(/\s+/g, '') + ".pdf";
+    var finalPDFNAME = FormData.reportOrder[0].sheet4.D4.replace(/\s+/g, '') + FormData.reportOrder[0].sheet4.D9.replace(/\s+/g, '') + ".pdf";
     for(var i =0; i < FormData.reportOrder.length; i++){
-        fileNames.push(FormData.reportOrder[i].sheet4.D4 + "_" + FormData.reportOrder[i].sheet4.D9 + "_" + FormData.reportOrder[i].sheet2.C16 +".xlsx"); 
+        fileNames.push(FormData.reportOrder[i].sheet4.D4 + "_" + FormData.reportOrder[i].sheet2.C16 + "_" + FormData.reportOrder[i].sheet4.D9 +".xlsx"); 
     };
-    for(var i = 0; i < fileNames.length; i++){
-        fileNames[i] = fileNames[i].replace(/\s+/g, '');
-        console.log(fileNames[i]);
-    }
     var forJava = "'" + JSON.stringify(FormData.reportOrder) + "'";
     processForm(forJava, fileNames).then(function(result) { //see function processForm below
         console.log(result);
@@ -132,7 +128,8 @@ var processForm = function (forJava, fileNames, finalPDFNAME) {
                     var footer = " --outdir ~/workspace/0xFEEDFACE/EALSurfer/public/clientpdfs";
                     var convertCommand;
                     for(var i = 0; i < fileNames.length; i++){
-                        convertCommand = header + fileNames[i] + footer + " && ";
+                        if(i == fileNames.length-1) convertCommand = header + fileNames[i] + footer;
+                        else convertCommand = header + fileNames[i] + footer + " && ";
                     }
                     exec(convertCommand, (err, stdout, stderr) => {
                     if(err !== null) {
@@ -143,14 +140,24 @@ var processForm = function (forJava, fileNames, finalPDFNAME) {
                         return;
                     }
                     resolve(new Promise( function(resolve, reject){
-                            for(var i = 0; i <fileNames.length; i++){
-                                fileNames[i] = "~/workspace/0xFEEDFACE/EALSurfer/public/clientpdfs/" + fileNames[i].replace('xlsx', 'pdf');
+                        for(var i = 0; i <fileNames.length; i++){
+                            fileNames[i] = "~/workspace/0xFEEDFACE/EALSurfer/public/clientpdfs/" + fileNames[i].replace('xlsx', 'pdf');
+                        }
+                        if(fileNames.length > 1){
+                            var mergeCommand = "pdftk";
+                            for(var i = 0; i < fileNames.length; i++){
+                                mergeCommand += " " + fileNames[i];
                             }
-                            PDFMerge(fileNames, {output: `~/workspace/0xFEEDFACE/EALSurfer/public/clientpdfs/` + finalPDFNAME})
-                                .then((buffer) => {
-                                    console.log(buffer);
-                                    resolve(true);
-                                });
+                            mergeCommand += " " + "cat output ~/workspace/0xFEEDFACE/EALSurfer/public/clientpdfs/" + finalPDFNAME;
+                            exec(mergeCommand, (err, stdout, stderr) => {
+                                if(err !== null) {
+                                    reject(err);
+                                    return;
+                                }
+                            });
+                        }
+                        else{} //change name
+                          
                         }));
                     });
                 }));
