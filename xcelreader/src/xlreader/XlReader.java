@@ -9,6 +9,7 @@ import java.util.Set;
 import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
 import com.google.gson.stream.JsonReader;
+import org.apache.poi.hssf.record.aggregates.WorksheetProtectionBlock;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellReference;
@@ -31,6 +32,8 @@ public class XlReader {
     private final String filename;
     private final Workbook workbook;
     private final ArrayList<Sheet> sheets;
+    private Workbook workbook1;
+
     private final int nsheets;
 
     public XlReader(final String filename) throws IOException {
@@ -130,7 +133,7 @@ public class XlReader {
         Boolean success = false;
         FormulaEvaluator evaluator = this.workbook.getCreationHelper().createFormulaEvaluator();
         try {
-            XSSFFormulaEvaluator.evaluateAllFormulaCells(this.workbook);
+            //XSSFFormulaEvaluator.evaluateAllFormulaCells(this.workbook);
             evaluator.evaluateAll();
             success = true;
         } catch (Exception e) {
@@ -199,31 +202,49 @@ public class XlReader {
      * @return          true if everything worked
      */
     private Boolean populate(int n, Object celref, Object val) {
+
             Boolean success = false;
             Sheet sheet = this.workbook.getSheetAt(n);
             CellReference ref = new CellReference(celref.toString());
             Row row = sheet.getRow(ref.getRow());
             Cell cell = row.getCell(ref.getCol());
 
+            System.out.format("populating %s", ref.toString());
+
             switch (cell.getCellTypeEnum()) {
                 case FORMULA:
+                    if (celref.toString().equals("D16")) {
+                        System.out.format("chemical is a formula");
+                    }
                     cell.setCellFormula(val.toString());
                     success = true;
                     break;
                 case BLANK:
+                    if (celref.toString().equals("D16")) {
+                        System.out.format("chemical is a blank");
+                    }
                     cell.setCellValue(val.toString());
                     success = true;
                     break;
                 case STRING:
+                    if (celref.toString().equals("D16")) {
+                        System.out.format("chemical is a string");
+                    }
                     //System.out.format("sval: %s\n", item.getValue());
                     cell.setCellValue(val.toString());
                     success = true;
                     break;
                 case BOOLEAN:
+                    if (celref.toString().equals("D16")) {
+                        System.out.format("chemical is a bool");
+                    }
                     cell.setCellValue(Boolean.parseBoolean(val.toString()));
                     success = true;
                     break;
                 case NUMERIC:
+                    if (celref.toString().equals("D14")) {
+                        System.out.format("chemical is a number");
+                    }
                     if (val.toString().equals("")) {
                         break;
                     }
@@ -232,9 +253,16 @@ public class XlReader {
                     success = true;
                     break;
                 case ERROR:
+                    if (celref.toString().equals("D14")) {
+                        System.out.format("chemical is a error");
+                    }
                     success = false;
                     break;
                 case _NONE:
+                    if (celref.equals("D14")) {
+                        System.out.format("chemical is a none");
+                    }
+                    cell.setCellValue(val.toString());
                     success = true;
                     break;
             }
@@ -259,7 +287,6 @@ public class XlReader {
             file = new FileOutputStream(filename);
         } catch (FileNotFoundException e) {
             success = false;
-            System.out.println("dafu???");
             e.printStackTrace();
         }
         try {
@@ -268,7 +295,7 @@ public class XlReader {
             for (int i = wb.getNumberOfSheets()-1; i >= 0; --i) {
                 if (false) {
                     wb.removeSheetAt(i);
-                    //System.out.println("Removed sheet at "+ i);
+                    System.out.println("Removed sheet at "+ i);
                 }
             }
             wb.write(file);
@@ -326,6 +353,7 @@ public class XlReader {
         final Boolean[] populateworked = {false};
 
         String name = new String();
+
         // Loop through all the workbooks in the data array.
         for (Map<String, LinkedTreeMap> chunk : alldata) {
 
@@ -356,31 +384,34 @@ public class XlReader {
                     populateworked[0] = xlreader.populate(n, cellref, cellval);
                 }); // END loop through cell data.
 
-                // Construct the filename.
-                name = String.format("%s%s_%s_%s.xlsx", outputdir, sitename, chemicalname, sitedate);
+                //xlreader.populate(2, "D14", "Chemical Name");
 
+                if (sheet.equals("sheet4")) {
+                    // Construct the filename.
+                    name = String.format("%s%s_%s_%s.xlsx", outputdir, sitename, chemicalname, sitedate);
+
+                    // Evaluate the workbook.
+                    try {
+                        evaluatedworked = xlreader.evaluateAll();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (DocumentException e) {
+                        e.printStackTrace();
+                    }
+                    // Write the results.
+                    try {
+                        writeworked = xlreader.writeXlsx(name);
+                        System.out.format("%d", 0);
+                        //System.exit(0);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        System.out.format("%d", 1);
+                        System.exit(1);
+                    }
+                }
             } // END loop through chunks entrys
-
         } // END loop through chunks
-        // Evaluate the workbook.
-        try {
-            evaluatedworked = xlreader.evaluateAll();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (DocumentException e) {
-            e.printStackTrace();
-        }
 
-        // Write the results.
-        try {
-            xlreader.writeXlsx(String.format("%s", name));
-            System.out.format("%d", 0);
-            System.exit(0);
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.format("%d", 1);
-            System.exit(1);
-        }
 
         // Check the status. And we're done.
         if (populateworked[0] && evaluatedworked && writeworked) {
