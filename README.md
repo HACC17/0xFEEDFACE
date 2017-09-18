@@ -11,7 +11,11 @@ development website that we set up.
 
 ## Testing locally
 You must have nodejs installed. This is only tested on Ubuntu. All commands
-should be run in EALSurfer/
+should be run in EALSurfer/. Once you have nodejs installed you also need to install the requirements...
+```shell  
+npm-install EALSurfer/package.json
+```
+
 ### Prepare your path
 ```shell 
 export PORT=5000
