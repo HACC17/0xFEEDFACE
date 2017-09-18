@@ -74,7 +74,7 @@ app.get("/submit/:data", function(req, res){
     var fileNames = [];
     var finalPDFNAME = FormData.reportOrder[0].sheet4.D4.replace(/\s+/g, '') + + FormData.reportOrder[0].sheet4.D9.replace(/\s+/g, '') + ".pdf";
     for(var i =0; i < FormData.reportOrder.length; i++){
-        fileNames.push(FormData.reportOrder[i].sheet4.D4+ FormData.reportOrder[i].sheet4.D9 + FormData.reportOrder[i].sheet2.C16 +".xlsx"); 
+        fileNames.push(FormData.reportOrder[i].sheet4.D4 + "_" + FormData.reportOrder[i].sheet4.D9 + "_" + FormData.reportOrder[i].sheet2.C16 +".xlsx"); 
     };
     for(var i = 0; i < fileNames.length; i++){
         fileNames[i] = fileNames[i].replace(/\s+/g, '');
