@@ -209,8 +209,6 @@ public class XlReader {
             Row row = sheet.getRow(ref.getRow());
             Cell cell = row.getCell(ref.getCol());
 
-            System.out.format("populating %s", ref.toString());
-
             switch (cell.getCellTypeEnum()) {
                 case FORMULA:
                     if (celref.toString().equals("D16")) {
@@ -295,7 +293,6 @@ public class XlReader {
             for (int i = wb.getNumberOfSheets()-1; i >= 0; --i) {
                 if (false) {
                     wb.removeSheetAt(i);
-                    System.out.println("Removed sheet at "+ i);
                 }
             }
             wb.write(file);
@@ -338,7 +335,6 @@ public class XlReader {
         }
 
         String data = args[0];
-        System.out.println(data);
 
         String master = "../xcelreader/excel_files/eal_surfer_master.xlsx";
         String outputdir = "./public/clientxlsx/";
@@ -346,7 +342,6 @@ public class XlReader {
 
         ArrayList<Map<String, LinkedTreeMap>> alldata = xlreader.json2Map(data);
 
-        System.out.format("length: %s", alldata.size());
 
         Boolean evaluatedworked = false;
         Boolean writeworked = false;
@@ -369,11 +364,9 @@ public class XlReader {
 
                 // Get the name parts.
                 if (sheet.equals("sheet2")) {
-                    System.out.println("sheet2");
                     chemicalname = celldata.get("C16").toString();
                 }
                 if (sheet.equals("sheet4")) {
-                    System.out.println("sheet4");
                     sitename = celldata.get("D4").toString().replaceAll(" ", "_");
                     sitedate = celldata.get("D9").toString().replaceAll(" ", "_");
                 }
@@ -401,7 +394,7 @@ public class XlReader {
                     // Write the results.
                     try {
                         writeworked = xlreader.writeXlsx(name);
-                        System.out.format("%d", 0);
+                        //System.out.format("%d", 0);
                         //System.exit(0);
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -415,6 +408,7 @@ public class XlReader {
 
         // Check the status. And we're done.
         if (populateworked[0] && evaluatedworked && writeworked) {
+            System.out.println(0);
             System.exit(0);
         } else {
             System.exit(1);
