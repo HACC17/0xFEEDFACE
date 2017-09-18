@@ -396,6 +396,17 @@ public class XlReader {
                         writeworked = xlreader.writeXlsx(name);
                         //System.out.format("%d", 0);
                         //System.exit(0);
+
+                        XlReader reader1 = new XlReader(name);
+
+                        int size = reader1.workbook.getNumberOfSheets() - 1;
+
+                        for (int i = size; i >= 0; --i) {
+                            if (i != 4 && i != 5) {
+                                reader1.workbook.removeSheetAt(i);
+                            }
+                        }
+                        reader1.writeXlsx(name);
                     } catch (IOException e) {
                         e.printStackTrace();
                         System.out.format("%d", 1);
