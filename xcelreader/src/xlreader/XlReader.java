@@ -211,55 +211,32 @@ public class XlReader {
 
             switch (cell.getCellTypeEnum()) {
                 case FORMULA:
-                    if (celref.toString().equals("D16")) {
-                        System.out.format("chemical is a formula");
-                    }
                     cell.setCellFormula(val.toString());
                     success = true;
                     break;
                 case BLANK:
-                    if (celref.toString().equals("D16")) {
-                        System.out.format("chemical is a blank");
-                    }
                     cell.setCellValue(val.toString());
                     success = true;
                     break;
                 case STRING:
-                    if (celref.toString().equals("D16")) {
-                        System.out.format("chemical is a string");
-                    }
-                    //System.out.format("sval: %s\n", item.getValue());
                     cell.setCellValue(val.toString());
                     success = true;
                     break;
                 case BOOLEAN:
-                    if (celref.toString().equals("D16")) {
-                        System.out.format("chemical is a bool");
-                    }
                     cell.setCellValue(Boolean.parseBoolean(val.toString()));
                     success = true;
                     break;
                 case NUMERIC:
-                    if (celref.toString().equals("D14")) {
-                        System.out.format("chemical is a number");
-                    }
                     if (val.toString().equals("")) {
                         break;
                     }
-                    //System.out.format("val: %d\n", Double.parseDouble(item.getValue().toString()));
                     cell.setCellValue(Double.parseDouble(val.toString()));
                     success = true;
                     break;
                 case ERROR:
-                    if (celref.toString().equals("D14")) {
-                        System.out.format("chemical is a error");
-                    }
                     success = false;
                     break;
                 case _NONE:
-                    if (celref.equals("D14")) {
-                        System.out.format("chemical is a none");
-                    }
                     cell.setCellValue(val.toString());
                     success = true;
                     break;
