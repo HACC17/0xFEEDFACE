@@ -146,11 +146,18 @@ public class XlReader {
      *
      * @return  evaluator       a FormulaEvaluator that is used when writing PDFs
      */
-    public FormulaEvaluator evaluateAll() throws FileNotFoundException, DocumentException {
+    public Boolean evaluateAll() throws FileNotFoundException, DocumentException {
+        Boolean success = false;
         FormulaEvaluator evaluator = this.workbook.getCreationHelper().createFormulaEvaluator();
-        XSSFFormulaEvaluator.evaluateAllFormulaCells(this.workbook);
-        evaluator.evaluateAll();
-        return evaluator;
+        try {
+            XSSFFormulaEvaluator.evaluateAllFormulaCells(this.workbook);
+            evaluator.evaluateAll();
+            success = true;
+        } catch (Exception e) {
+            success = false;
+        }
+        return success;
+        //return evaluator;
     }
 
     /**
@@ -394,12 +401,12 @@ public class XlReader {
         return result;
     }
 
-
-
     public static void main(String[] args) throws IOException, DocumentException {
 
-    //    /* Check the command line arguments. */
-        if (args.length != 1) { System.exit(2); }
+        //    /* Check the command line arguments. */
+        if (args.length != 1) {
+            System.exit(2);
+        }
 
         String data = args[0];
 
@@ -407,8 +414,9 @@ public class XlReader {
         XlReader xlreader = new XlReader(master);
 
         ArrayList<Map<String, LinkedTreeMap>> alldata = xlreader.json2Map(data);
-
-        Boolean named = false;
+        Boolean evaluatedworked = false;
+        Boolean writeworked = false;
+        final Boolean[] populateworked = {false};
 
         for (Map<String, LinkedTreeMap> chunk : alldata) {
             String chemicalname = new String();
@@ -421,32 +429,41 @@ public class XlReader {
 
                 if (sheet.equals("sheet2")) {
                     chemicalname = celldata.get("C16").toString();
-                }
-                else if (sheet.equals("sheet4")) {
+                } else if (sheet.equals("sheet4")) {
                     sitename = celldata.get("D4").toString().replaceAll(" ", "_");
                     sitedate = celldata.get("D9").toString().replaceAll(" ", "_");
                 }
                 celldata.forEach((cellref, cellval) -> {
                     int n = (int) Integer.parseInt(sheet.replaceAll("^sheet", ""));
-                    xlreader.populate(n, cellref, cellval);
+                    populateworked[0] = xlreader.populate(n, cellref, cellval);
                 });
             }
-            String name = String.format("%s_%s_%s.xlsx", sitename, chemicalname,sitedate);
+            String name = String.format("%s_%s_%s.xlsx", sitename, chemicalname, sitedate);
 
+            // Evaluate the workbook.
             try {
-                xlreader.evaluateAll();
+                evaluatedworked = xlreader.evaluateAll();
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (DocumentException e) {
                 e.printStackTrace();
             }
+
+            // Write the results.
             try {
                 xlreader.writeXlsx(String.format("%s", name));
-                System.out.println("Wrote file: " + name);
+                System.out.format("%d", 0);
+                System.exit(0);
             } catch (IOException e) {
                 e.printStackTrace();
+                System.out.format("%d", 1);
+                System.exit(1);
             }
         }
-    System.exit(0);
+        if (populateworked[0] && evaluatedworked && writeworked) {
+            System.exit(0);
+        } else {
+            System.exit(1);
+        }
     }
 }
