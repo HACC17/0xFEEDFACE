@@ -2,7 +2,6 @@ package xlreader;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 import com.google.gson.Gson;
@@ -12,7 +11,6 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import com.itextpdf.text.*;
 
 /**
  * This class represents a set of excel documents.
@@ -28,7 +26,6 @@ public class XlReader {
     private final String filename;
     private final Workbook workbook;
     private final ArrayList<Sheet> sheets;
-    private Workbook workbook1;
 
     private final int nsheets;
 
@@ -98,24 +95,6 @@ public class XlReader {
     }
 
     /**
-     * Find all of the formula in this workbook.
-     */
-    private HashMap<String, String> findAllFormulae() {
-        HashMap<String, String> formulae = new HashMap<>();
-
-        for (Sheet sheet : this.workbook) {
-            for (Row row : sheet) {
-                for (Cell cell : row) {
-                    if (cell.getCellTypeEnum() == CellType.FORMULA) {
-                        formulae.put(cell.getAddress().toString(), cell.getCellFormula());
-                    }
-                }
-            }
-        }
-        return formulae;
-    }
-
-    /**
      * Evaluate all the cells in a Sheet.
      *
      * The caller is responsible for knowing where the result goes. It will probably be
@@ -125,7 +104,7 @@ public class XlReader {
      *
      * @return  evaluator       a FormulaEvaluator that is used when writing PDFs
      */
-    public Boolean evaluateAll() throws FileNotFoundException, DocumentException {
+    public Boolean evaluateAll() throws FileNotFoundException {
         Boolean success = false;
         FormulaEvaluator evaluator = this.workbook.getCreationHelper().createFormulaEvaluator();
         try {
@@ -136,57 +115,6 @@ public class XlReader {
             success = false;
         }
         return success;
-    }
-
-    /**
-     * Get the value from a cell.
-     *
-     * Returns a map with {cell reference : value}.
-     *
-     * Note: Not all cells will have a value. If the cell is blank or doesn't exist
-     *       then the resulting map will have a null value. It is the caller's
-     *       responsibility to check for null.
-     *
-     * @param   sheetnumber      an integer
-     * @param   cellreferences   a string like "A3"
-     * @return  map              a hash map like {cellreference : value | null}
-     */
-    public HashMap<String, Object> getCellValue(final int sheetnumber, final String[] cellreferences) {
-
-        final HashMap<String, Object> map = new HashMap<>();
-        final Sheet sheet = this.workbook.getSheetAt(sheetnumber);
-
-        for (String cr : cellreferences) {
-            CellReference cellref = new CellReference(cr);
-            Row row = sheet.getRow(cellref.getRow());
-            Cell cell = row.getCell(cellref.getCol());
-            String addr = cell.getAddress().toString();
-
-            switch (cell.getCellTypeEnum()) {
-                case FORMULA:
-                    map.put(addr, cell.getNumericCellValue());
-                    break;
-                case BLANK:
-                    map.put(addr, cell.getRichStringCellValue());
-                    break;
-                case STRING:
-                    map.put(addr, cell.getStringCellValue());
-                    break;
-                case BOOLEAN:
-                    map.put(addr, cell.getBooleanCellValue());
-                    break;
-                case NUMERIC:
-                    map.put(addr, cell.getNumericCellValue());
-                    break;
-                case ERROR:
-                    map.put(addr, cell.getErrorCellValue());
-                    break;
-                case _NONE:
-                    map.put(addr, cell.getRichStringCellValue());
-                    break;
-            }
-        }
-        return map;
     }
 
     /**
@@ -298,9 +226,8 @@ public class XlReader {
      *
      * @param args  a json string like [{"sheet1": {cell:value},..., "sheetn":...}
      * @throws IOException
-     * @throws DocumentException
      */
-    public static void main(String[] args) throws IOException, DocumentException {
+    public static void main(String[] args) throws IOException {
 
         //    /* Check the command line arguments. */
         if (args.length != 1) {
@@ -357,8 +284,6 @@ public class XlReader {
                     try {
                         evaluatedworked = xlreader.evaluateAll();
                     } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (DocumentException e) {
                         e.printStackTrace();
                     }
 
