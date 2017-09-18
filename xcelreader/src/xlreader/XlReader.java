@@ -426,6 +426,10 @@ public class XlReader {
                     sitename = celldata.get("D4").toString().replaceAll(" ", "_");
                     sitedate = celldata.get("D9").toString().replaceAll(" ", "_");
                 }
+                celldata.forEach((cellref, cellval) -> {
+                    int n = (int) Integer.parseInt(sheet.replaceAll("^sheet", ""));
+                    xlreader.populate(n, cellref, cellval);
+                });
             }
             String name = String.format("%s_%s_%s.xlsx", sitename, chemicalname,sitedate);
 
