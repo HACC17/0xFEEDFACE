@@ -55,8 +55,8 @@ app.get("/master_file", function(req, res){
 });
 
 app.get("/download/:userFilePath", function(req, res){
-    var fileName = req.param.userFilePath;
-    res.download("public/clientpdfs/"+fileName, fileName)
+    var fileName = req.params.userFilePath;
+    res.download("public/clientpdfs/" + fileName, fileName)
 });
 
 app.get("/glossary", function(req, res){
@@ -68,7 +68,6 @@ app.get("/updates", function(req, res){
 });
 
 app.get("/submit/:data", function(req, res){
-    console.log("Form submission:");
     var rawFormData = req.params.data;
     var FormData = qs.parse(rawFormData);
     var fileNames = [];
@@ -78,10 +77,8 @@ app.get("/submit/:data", function(req, res){
     };
     var forJava = "'" + JSON.stringify(FormData.reportOrder) + "'";
     processForm(forJava, fileNames, finalPDFNAME).then(function(result) { //see function processForm below
-        console.log(result);
         res.render("download", {downloadLink : "/download/" + finalPDFNAME});
         }, function(err) {
-        console.log(err); 
         res.render("error");
     });
 });
@@ -121,7 +118,6 @@ app.post("/uploads", function(req, res){
 
 var processForm = function (forJava, fileNames, finalPDFNAME) {
     return new Promise(function(resolve, reject) {
-        console.log(fileNames);
         exec('java -jar ~/workspace/0xFEEDFACE/xcelreader/out/artifacts/xcelreader_jar/xcelreader.jar '  + forJava, (err, stdout, stderr) => {
             if(stdout==0){
                 resolve(new Promise( function(resolve, reject) {
@@ -132,7 +128,6 @@ var processForm = function (forJava, fileNames, finalPDFNAME) {
                         if(i == fileNames.length-1) convertCommand += header + fileNames[i] + footer;
                         else convertCommand += header + fileNames[i] + footer + " ; ";
                     }
-                    console.log(convertCommand);
                     exec(convertCommand, (err, stdout, stderr) => {
                     if(err !== null) {
                         console.log(stdout);
@@ -156,10 +151,17 @@ var processForm = function (forJava, fileNames, finalPDFNAME) {
                                     reject(err);
                                     return;
                                 }
+                                resolve();
                             });
                         }
-                        else{} //change name
-                          
+                        var changeName = "mv " + fileNames[0] + " ~/workspace/0xFEEDFACE/EALSurfer/public/clientpdfs/" + finalPDFNAME;
+                        exec(changeName, (err, stdout, stderr) => {
+                            if(err !== null) {
+                                reject(err);
+                                return;
+                            }
+                        });
+                        resolve(); 
                         }));
                     });
                 }));
