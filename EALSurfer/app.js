@@ -3,8 +3,8 @@ var app = express();
 var XLSX = require('xlsx'); //for processing excel files
 var qs = require('qs');
 
+const PDFMerge = require('pdf-merge');
 const { exec } = require('child_process');
-
 
 app.use(express.static("public")); //point express to public folder
 app.set("view engine", "ejs"); //use embedded java script
@@ -50,9 +50,13 @@ app.get("/eal_spreadsheet", function(req, res){
    res.render("eal_spreadsheet"); 
 });
 
-app.get("/download", function(req, res){
-   var path = "public/uploads/master_spreadsheet_files/test.xlsx";
-   res.download(path, "EALSurfer.xlsx"); 
+app.get("/master_file", function(req, res){
+   res.download("public/uploads/master_spreadsheet_files/HEER_EAL_Surfer_FULL_VERSION_HDOH_Summer_2016rev_Jan_2017.xlsx", "HEER_EAL_Surfer_FULL_VERSION_HDOH_Summer_2016rev_Jan_2017.xlsx"); 
+});
+
+app.get("/download/:userFilePath", function(req, res){
+    var fileName = req.param.userFilePath;
+    res.download("public/clientpdfs/"+fileName, fileName)
 });
 
 app.get("/glossary", function(req, res){
@@ -67,13 +71,22 @@ app.get("/submit/:data", function(req, res){
     console.log("Form submission:");
     var rawFormData = req.params.data;
     var FormData = qs.parse(rawFormData);
+    var fileNames = [];
+    var finalPDFNAME = FormData.reportOrder[0].sheet4.D4.replace(/\s+/g, '') + + FormData.reportOrder[0].sheet4.D9.replace(/\s+/g, '') + ".pdf";
+    for(var i =0; i < FormData.reportOrder.length; i++){
+        fileNames.push(FormData.reportOrder[i].sheet4.D4+ FormData.reportOrder[i].sheet4.D9 + FormData.reportOrder[i].sheet2.C16 +".xlsx"); 
+    };
+    for(var i = 0; i < fileNames.length; i++){
+        fileNames[i] = fileNames[i].replace(/\s+/g, '');
+        console.log(fileNames[i]);
+    }
     var forJava = "'" + JSON.stringify(FormData.reportOrder) + "'";
-    processForm(forJava).then(function(result) { //see function processForm below
+    processForm(forJava, fileNames).then(function(result) { //see function processForm below
         console.log(result);
-        res.send("download");
+        res.render("download", {downloadLink : "/download/" + finalPDFNAME});
         }, function(err) {
         console.log(err); 
-        res.render("download");
+        res.render("error");
     });
 });
 
@@ -110,23 +123,45 @@ app.post("/uploads", function(req, res){
 * that promise resolves, another new promise is made with executing libreoffice 
 * pdf convert */
 
-var processForm = function (formData) {
-    var convertCommand = "libreoffice --headless --convert-to pdf ~/workspace/0xFEEDFACE/EALSurfer/public/uploads/master_spreadsheet_files/test.xlsx --outdir ~/workspace/0xFEEDFACE/EALSurfer/public/clientpdfs";
+var processForm = function (forJava, fileNames, finalPDFNAME) {
     return new Promise(function(resolve, reject) {
-        exec('java -jar ~/workspace/0xFEEDFACE/xcelreader/out/artifacts/xcelreader_jar/xcelreader.jar '  + formData, (err, stdout, stderr) => {
-            if(err) {
-                reject(stdout + " " + err);
+        exec('java -jar ~/workspace/0xFEEDFACE/xcelreader/out/artifacts/xcelreader_jar/xcelreader.jar '  + forJava, (err, stdout, stderr) => {
+            if(stdout==0){
+                resolve(new Promise( function(resolve, reject) {
+                    var header = "libreoffice --headless --convert-to pdf ~/workspace/0xFEEDFACE/EALSurfer/public/clientxlsx/";
+                    var footer = " --outdir ~/workspace/0xFEEDFACE/EALSurfer/public/clientpdfs";
+                    var convertCommand;
+                    for(var i = 0; i < fileNames.length; i++){
+                        convertCommand = header + fileNames[i] + footer + " && ";
+                    }
+                    exec(convertCommand, (err, stdout, stderr) => {
+                    if(err !== null) {
+                        console.log(stdout);
+                        console.log(stderr);
+                        console.log(err);
+                        reject(err);
+                        return;
+                    }
+                    resolve(new Promise( function(resolve, reject){
+                            for(var i = 0; i <fileNames.length; i++){
+                                fileNames[i] = "~/workspace/0xFEEDFACE/EALSurfer/public/clientpdfs/" + fileNames[i].replace('xlsx', 'pdf');
+                            }
+                            PDFMerge(fileNames, {output: `~/workspace/0xFEEDFACE/EALSurfer/public/clientpdfs/` + finalPDFNAME})
+                                .then((buffer) => {
+                                    console.log(buffer);
+                                    resolve(true);
+                                });
+                        }));
+                    });
+                }));
+            }
+            else{
+                console.log(stdout);
+                console.log(stderr);
+                console.log(err);
+                reject(err);
                 return;
             }
-            resolve(new Promise( function(resolve, reject) {
-                exec(convertCommand, (err, stdout, stderr) => {
-                if(err) {
-                    reject(err);
-                    return;
-                }
-                resolve(stdout);
-            });
-        }));
         });
     });
 };
